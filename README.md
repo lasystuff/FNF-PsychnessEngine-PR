@@ -1,112 +1,71 @@
-# Friday Night Funkin' - Psych Engine
-Engine originally used on [Mind Games Mod](https://gamebanana.com/mods/301107), intended to be a fix for the vanilla version's many issues while keeping the casual play aspect of it. Also aiming to be an easier alternative to newbie coders.
+# Friday Night Funkin' - Psychness Engine
+このエンジンは、[Psych Engine](https://github.com/ShadowMario/FNF-PsychEngine) 1.0.3を改造し、様々な機能を追加したちょっぴり上級者向けのエンジンです。
 
-## Installation:
+## ビルドするには？
+Psych Engineと変わらないはずです！
+[Psych Engine 1.x のビルド方法はこちらを参照してください！](https://github.com/ShadowMario/FNF-PsychEngine/blob/main/docs/BUILDING.md)
 
-Refer to [the Build Instructions](/docs/BUILDING.md)
+## 新しい機能の例:
 
-## Customization:
+### 少しだけ改造されたチャートエディタ
+![enter image description here](https://private-user-images.githubusercontent.com/127845723/425750416-6738531d-ae7f-44b6-ade1-101f90b47c76.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDI2NTE0MjUsIm5iZiI6MTc0MjY1MTEyNSwicGF0aCI6Ii8xMjc4NDU3MjMvNDI1NzUwNDE2LTY3Mzg1MzFkLWFlN2YtNDRiNi1hZGUxLTEwMWY5MGI0N2M3Ni5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwMzIyJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDMyMlQxMzQ1MjVaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0xZTdhZWZlNzcyNzIyMjljNWMyMmU2M2E0NzQ2NzkyODBiNjRmNmRjODg4MDljY2I4MTlmMzFkOThkNTExNWJlJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.o4P4F46Om27jYrYwUY-o9v_GDdQ_fE8XFO58Drn1FaA)
+- 履歴機能が追加されました。
+- Ctrl + OでOpponentのNoteが全選択(現在のSection内のみ)できるようになりました。
+- Ctrl + PでPlayerのNoteが全選択(現在のSection内のみ)できるようになりました。
+- チャートがセーブされていない状態でゲームを閉じようとすると、警告が現れるようになりました。
 
-if you wish to disable things like *Lua Scripts* or *Video Cutscenes*, you can read over to `Project.xml`
+### 全く新しいLuaの世界
+![enter image description here](https://private-user-images.githubusercontent.com/127845723/425751285-42b84c1a-22cf-4b3a-9c65-76975b2b7328.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDI2NTIyMzcsIm5iZiI6MTc0MjY1MTkzNywicGF0aCI6Ii8xMjc4NDU3MjMvNDI1NzUxMjg1LTQyYjg0YzFhLTIyY2YtNGIzYS05YzY1LTc2OTc1YjJiNzMyOC5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwMzIyJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDMyMlQxMzU4NTdaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT01ZjFkMmJmM2ZmOTg3NjBmY2YwMDMxZWIxMjkxNTRiZDFlNTI1NjViZGUwZjJlMTMzNTFiM2RjNTQ3ZDY2OGQzJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.WiXmPVHHgUysjuaQaakthH4f0fpFmGB79cDBKPnp52A)
 
-inside `Project.xml`, you will find several variables to customize Psych Engine to your liking
+おや...？
 
-to start you off, disabling Videos should be simple, simply Delete the line `"VIDEOS_ALLOWED"` or comment it out by wrapping the line in XML-like comments, like this `<!-- YOUR_LINE_HERE -->`
+![enter image description here](https://private-user-images.githubusercontent.com/127845723/425750888-becbd66a-8292-4af8-8dd8-7a1cd93c636b.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDI2NTE4NzMsIm5iZiI6MTc0MjY1MTU3MywicGF0aCI6Ii8xMjc4NDU3MjMvNDI1NzUwODg4LWJlY2JkNjZhLTgyOTItNGFmOC04ZGQ4LTdhMWNkOTNjNjM2Yi5naWY_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwMzIyJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDMyMlQxMzUyNTNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0zODhiODUyNDVjMjZmMTFiMjFiODY0ZWIzNGI4NTJiY2Q0YjkwZmE4MGQxMTk3ZTc3OGM3OTY2ZWYzMDA1OWZkJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.5Vgk4DE_DIbIVObqFCo8iDxL4zku8zRjrZ0LdEhT9FY)
 
-same goes for *Lua Scripts*, comment out or delete the line with `LUA_ALLOWED`, this and other customization options are all available within the `Project.xml` file
+- Main MenuでLuaが使用可能
+- Custom Stateで0からLuaでStateを組み立てることが可能 (上のgifもこれで作られました!)
 
-## Credits:
+## クレジット:
+
+### Psychness Engine
+
+- _nes0116 - Head Developer, Programmer.
+
+### Psych Engine
+
 * Shadow Mario - Head Developer, Programmer.
+
 * Riveren - Main Artist.
 
 ### Special Thanks
+
 * bbpanzu - Ex-Team Member (Programmer).
+
 * crowplexus - HScript Iris, Input System v3, and Other PRs.
+
 * Kamizeta - Creator of Pessy, Psych Engine's mascot.
+
 * MaxNeton - Loading Screen Easter Egg Artist/Animator.
+
 * Keoiki - Note Splash Animations and Latin Alphabet.
+
 * SqirraRNG - Crash Handler and Base code for Chart Editor's Waveform.
+
 * EliteMasterEric - Runtime Shaders support and Other PRs.
+
 * MAJigsaw77 - .MP4 Video Loader Library (hxvlc).
+
 * Tahir Toprak Karabekiroglu - Note Splash Editor and Other PRs.
+
 * iFlicky - Composer of Psync, Tea Time and some sound effects.
+
 * KadeDev - Fixed some issues on Chart Editor and Other PRs.
+
 * superpowers04 - LUA JIT Fork.
+
 * CheemsAndFriends - Creator of FlxAnimate.
+
 * Ezhalt - Pessy's Easter Egg Jingle.
+
 * MaliciousBunny - Video for the Final Update.
+
 _____________________________________
-
-# Features
-
-## Attractive animated dialogue boxes:
-
-![](https://user-images.githubusercontent.com/44785097/127706669-71cd5cdb-5c2a-4ecc-871b-98a276ae8070.gif)
-
-
-## Mod Support
-* Probably one of the main points of this engine, you can code in .lua files outside of the source code, making your own weeks without even messing with the source!
-* Comes with a Mod Organizing/Disabling Menu.
-
-
-## Atleast one change to every week:
-### Week 1:
-  * New Dad Left sing sprite
-  * Unused stage lights are now used
-  * Dad Battle has a spotlight effect for the breakdown
-### Week 2:
-  * Both BF and Skid & Pump does "Hey!" animations
-  * Thunders does a quick light flash and zooms the camera in slightly
-  * Added a quick transition/cutscene to Monster
-### Week 3:
-  * BF does "Hey!" during Philly Nice
-  * Blammed has a cool new colors flash during that sick part of the song
-### Week 4:
-  * Better hair physics for Mom/Boyfriend (Maybe even slightly better than Week 7's :eyes:)
-  * Henchmen die during all songs. Yeah :(
-### Week 5:
-  * Bottom Boppers and GF does "Hey!" animations during Cocoa and Eggnog
-  * On Winter Horrorland, GF bops her head slower in some parts of the song.
-### Week 6:
-  * On Thorns, the HUD is hidden during the cutscene
-  * Also there's the Background girls being spooky during the "Hey!" parts of the Instrumental
-
-## Cool new Chart Editor changes and countless bug fixes
-![](https://github.com/ShadowMario/FNF-PsychEngine/blob/main/docs/img/chart.png?raw=true)
-* You can now chart "Event" notes, which are bookmarks that trigger specific actions that usually were hardcoded on the vanilla version of the game.
-* Your song's BPM can now have decimal values
-* You can manually adjust a Note's strum time if you're really going for milisecond precision
-* You can change a note's type on the Editor, it comes with five example types:
-  * Alt Animation: Forces an alt animation to play, useful for songs like Ugh/Stress
-  * Hey: Forces a "Hey" animation instead of the base Sing animation, if Boyfriend hits this note, Girlfriend will do a "Hey!" too.
-  * Hurt Notes: If Boyfriend hits this note, he plays a miss animation and loses some health.
-  * GF Sing: Rather than the character hitting the note and singing, Girlfriend sings instead.
-  * No Animation: Character just hits the note, no animation plays.
-
-## Multiple editors to assist you in making your own Mod
-![Screenshot_3](https://user-images.githubusercontent.com/44785097/144629914-1fe55999-2f18-4cc1-bc70-afe616d74ae5.png)
-* Working both for Source code modding and Downloaded builds!
-
-## Story mode menu rework:
-![](https://i.imgur.com/UB2EKpV.png)
-* Added a different BG to every song (less Tutorial)
-* All menu characters are now in individual spritesheets, makes modding it easier.
-
-## Credits menu
-![Screenshot_1](https://user-images.githubusercontent.com/44785097/144632635-f263fb22-b879-4d6b-96d6-865e9562b907.png)
-* You can add a head icon, name, description and a Redirect link for when the player presses Enter while the item is currently selected.
-
-## Awards/Achievements
-* The engine comes with 16 example achievements that you can mess with and learn how it works (Check Achievements.hx and search for "checkForAchievement" on PlayState.hx)
-
-## Options menu:
-* You can change Note colors, Delay and Combo Offset, Controls and Preferences there.
- * On Preferences you can toggle Downscroll, Middlescroll, Anti-Aliasing, Framerate, Low Quality, Note Splashes, Flashing Lights, etc.
-
-## Other gameplay features:
-* When the enemy hits a note, their strum note also glows.
-* Lag doesn't impact the camera movement and player icon scaling anymore.
-* Some stuff based on Week 7's changes has been put in (Background colors on Freeplay, Note splashes)
-* You can reset your Score on Freeplay/Story Mode by pressing Reset button.
-* You can listen to a song or adjust Scroll Speed/Damage taken/etc. on Freeplay by pressing Space.
-* You can enable "Combo Stacking" in Gameplay Options. This causes the combo sprites to just be one sprite with an animation rather than sprites spawning each note hit.
