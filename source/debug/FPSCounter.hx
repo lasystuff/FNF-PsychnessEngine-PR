@@ -1,9 +1,12 @@
 package debug;
 
 import flixel.FlxG;
+import lime.math.Rectangle;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.Sprite;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
-import lime.system.Clipboard;
 
 /**
 	The FPS class provides an easy-to-use monitor to display
@@ -22,27 +25,27 @@ class FPSCounter extends TextField
 	public var memoryMegas(get, never):Float;
 
 	/**
-		アプリの最大のメモリ使用量
+		Maximum memory usage of the application
 	**/
 	public var maxMemoryMegas:Float;
 
 	/**
-		Windowsの最大メモリ (搭載RAM容量)
+		Windows maximum memory (installed RAM capacity)
 	**/
 	var maxWindowsMemory:Float;
 
 	/**
-		Windowsのバージョン
+		Windows Version
 	**/
 	var windowsVersion:String;
 
 	/**
-		WindowsのCPUの名前
+		Windows CPU Name
 	**/
 	var windowsCPU:String;
 
 	/**
-		WindowsのGPUの名前
+		Windows GPU Name
 	**/
 	var windowsGPU:String;
 
@@ -80,15 +83,42 @@ class FPSCounter extends TextField
 	private override function __enterFrame(deltaTime:Float):Void
 	{
 		#if desktop
+		// Toggle debug display
 		if (Controls.instance.justPressed('debug_3'))
 		{
 			curDisplay = FlxMath.wrap(curDisplay + 1, 0, 2);
 
 			FlxG.save.data.displayDebugType = curDisplay;
 			FlxG.save.flush();
-		}			
+		}
+
+		// Take screenshot
+		if (Controls.instance.justPressed('screen_shot'))
+		{
+			function formatNum(num:Int):String
+			{
+				return num < 10 ? '0' + num : '' + num;
+			}
+
+			var flashBitmap = new Bitmap(new BitmapData(Std.int(FlxG.stage.width), Std.int(FlxG.stage.height), false, 0xFFFFFFFF));
+			var flashSpr = new Sprite();
+			flashSpr.addChild(flashBitmap);
+			FlxG.stage.addChild(flashSpr);
+			if (!ClientPrefs.data.flashing)
+				flashSpr.alpha = 0.1;
+			FlxTween.tween(flashSpr, {alpha: 0}, 0.15, {ease: FlxEase.quadOut, onComplete: _ -> FlxG.stage.removeChild(flashSpr)});
+
+			FlxG.sound.play(Paths.sound('screenshot'));
+
+			if (!FileSystem.exists("./screenshots/"))
+				FileSystem.createDirectory("./screenshots/");
+
+			var fileName:String = 'Screenshot-${formatNum(Date.now().getFullYear())}-${formatNum(Date.now().getMonth() + 1)}-${formatNum(Date.now().getDate())} ${formatNum(Date.now().getHours())}${formatNum(Date.now().getMinutes())}${formatNum(Date.now().getSeconds())}';
+			File.saveBytes('screenshots/' + fileName + '.png',
+				FlxG.stage.window.readPixels(new Rectangle(0, 0, FlxG.stage.window.width, FlxG.stage.window.height)).encode());
+		}
 		#end
-		
+
 		final now:Float = haxe.Timer.stamp() * 1000;
 		times.push(now);
 		while (times[0] < now - 1000)

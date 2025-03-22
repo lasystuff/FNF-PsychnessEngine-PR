@@ -100,6 +100,8 @@ class ClientPrefs {
 		'back'			=> [BACKSPACE, ESCAPE],
 		'pause'			=> [ENTER, ESCAPE],
 		'reset'			=> [R],
+
+		'screen_shot'	=> [F2],
 		
 		'volume_mute'	=> [ZERO],
 		'volume_up'		=> [NUMPADPLUS, PLUS],

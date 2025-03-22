@@ -34,6 +34,8 @@ class ControlsSubState extends MusicBeatSubstate
 		[true, 'Back', 'back', 'Back'],
 		[true, 'Pause', 'pause', 'Pause'],
 		[false],
+		[false, 'Screenshot', 'screen_shot', 'Screenshot'],
+		[false],
 		[false, 'VOLUME'],
 		[false, 'Mute', 'volume_mute', 'Volume Mute'],
 		[false, 'Up', 'volume_up', 'Volume Up'],
