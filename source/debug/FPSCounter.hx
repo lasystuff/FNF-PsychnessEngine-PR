@@ -100,6 +100,13 @@ class FPSCounter extends TextField
 				return num < 10 ? '0' + num : '' + num;
 			}
 
+			if (!FileSystem.exists("./screenshots/"))
+				FileSystem.createDirectory("./screenshots/");
+
+			var fileName:String = 'Screenshot-${formatNum(Date.now().getFullYear())}-${formatNum(Date.now().getMonth() + 1)}-${formatNum(Date.now().getDate())} ${formatNum(Date.now().getHours())}${formatNum(Date.now().getMinutes())}${formatNum(Date.now().getSeconds())}';
+			File.saveBytes('screenshots/' + fileName + '.png',
+				FlxG.stage.window.readPixels(new Rectangle(0, 0, FlxG.stage.window.width, FlxG.stage.window.height)).encode());
+
 			var flashBitmap = new Bitmap(new BitmapData(Std.int(FlxG.stage.width), Std.int(FlxG.stage.height), false, 0xFFFFFFFF));
 			var flashSpr = new Sprite();
 			flashSpr.addChild(flashBitmap);
@@ -109,13 +116,6 @@ class FPSCounter extends TextField
 			FlxTween.tween(flashSpr, {alpha: 0}, 0.15, {ease: FlxEase.quadOut, onComplete: _ -> FlxG.stage.removeChild(flashSpr)});
 
 			FlxG.sound.play(Paths.sound('screenshot'));
-
-			if (!FileSystem.exists("./screenshots/"))
-				FileSystem.createDirectory("./screenshots/");
-
-			var fileName:String = 'Screenshot-${formatNum(Date.now().getFullYear())}-${formatNum(Date.now().getMonth() + 1)}-${formatNum(Date.now().getDate())} ${formatNum(Date.now().getHours())}${formatNum(Date.now().getMinutes())}${formatNum(Date.now().getSeconds())}';
-			File.saveBytes('screenshots/' + fileName + '.png',
-				FlxG.stage.window.readPixels(new Rectangle(0, 0, FlxG.stage.window.width, FlxG.stage.window.height)).encode());
 		}
 		#end
 
