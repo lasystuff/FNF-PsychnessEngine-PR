@@ -1,6 +1,6 @@
 _____________________________________
 
-[Test](docs/img/chart.png)
+![Test](docs/img/chart.png)
 
 # Friday Night Funkin' - Psychness Engine
 このエンジンは、[Psych Engine](https://github.com/ShadowMario/FNF-PsychEngine) 1.0.3を改造し、様々な機能を追加したちょっぴり上級者向けのエンジンです。
