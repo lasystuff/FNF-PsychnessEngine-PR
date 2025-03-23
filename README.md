@@ -5,6 +5,7 @@ _____________________________________
 
 ## ビルドするには？
 Psych Engineと変わらないはずです！
+
 [Psych Engine 1.x のビルド方法はこちらを参照してください！](https://github.com/ShadowMario/FNF-PsychEngine/blob/main/docs/BUILDING.md)
 
 ## 新しい機能の例:
