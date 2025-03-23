@@ -17,7 +17,7 @@ Psych Engineと変わらないはずです！
 - Ctrl + PでPlayerのNoteが全選択(現在のSection内のみ)できるようになりました。
 - チャートがセーブされていない状態でゲームを閉じようとすると、警告が現れるようになりました。
 
-### 全く新しいLuaの世界
+### 全く新しい？Luaの世界
 
 ![Huh?](docs/img/script.png)
 
