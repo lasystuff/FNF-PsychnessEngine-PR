@@ -134,6 +134,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		vortexIndicator.color = quantColors[Std.int(FlxMath.bound(quantizations.indexOf(curQuant), 0, quantColors.length - 1))];
 
 	static var chartSaved:Bool = true;
+	static var lastSongPosition:Float = 0;
 
 	var sectionFirstNoteID:Int = 0;
 	var sectionFirstEventID:Int = 0;
@@ -203,7 +204,6 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 	public function new(?shouldReset:Bool = true)
 	{
 		this._shouldReset = shouldReset;
-		trace(_shouldReset);
 		super();
 	}
 
@@ -230,6 +230,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		_keysPressedBuffer.resize(keysArray.length);
 
 		if(_shouldReset) Conductor.songPosition = 0;
+		else Conductor.songPosition = lastSongPosition;
 		persistentUpdate = false;
 		FlxG.mouse.visible = true;
 		FlxG.sound.list.add(vocals);
@@ -5119,6 +5120,8 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		persistentUpdate = false;
 		FlxG.mouse.visible = false;
 		chartEditorSave.flush();
+
+		lastSongPosition = Conductor.songPosition;
 
 		setSongPlaying(false);
 		updateChartData();

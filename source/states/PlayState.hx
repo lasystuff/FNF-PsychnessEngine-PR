@@ -1872,7 +1872,7 @@ class PlayState extends MusicBeatState
 		DiscordClient.resetClientID();
 		#end
 
-		MusicBeatState.switchState(new ChartingState());
+		MusicBeatState.switchState(new ChartingState(!chartingMode));
 	}
 
 	function openCharacterEditor()
