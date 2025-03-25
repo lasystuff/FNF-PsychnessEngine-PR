@@ -200,10 +200,10 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 	var selectionStart:FlxPoint = FlxPoint.get();
 	var selectionBox:FlxSprite;
 
-	var _shouldReset:Bool = true;
-	public function new(?shouldReset:Bool = true)
+	var _startIndex:Int = 0;
+	public function new(?startIndex:Int = 0)
 	{
-		this._shouldReset = shouldReset;
+		this._startIndex = startIndex;
 		super();
 	}
 
@@ -229,8 +229,15 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		if(Difficulty.list.length < 1) Difficulty.resetList();
 		_keysPressedBuffer.resize(keysArray.length);
 
-		if(_shouldReset) Conductor.songPosition = 0;
-		else Conductor.songPosition = lastSongPosition;
+		switch (_startIndex)
+		{
+			case 1: // Charting Mode
+				Conductor.songPosition = lastSongPosition;
+			case 2: // Charting Mode + Shift
+				//
+			default: //
+				Conductor.songPosition = 0;
+		}
 		persistentUpdate = false;
 		FlxG.mouse.visible = true;
 		FlxG.sound.list.add(vocals);
@@ -471,7 +478,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 
 		loadMusic();
 		reloadNotesDropdowns();
-		if(!_shouldReset)
+		if(_startIndex != 0)
 		{
 			vocals.time = opponentVocals.time = FlxG.sound.music.time = Conductor.songPosition - Conductor.offset;
 			if(FlxG.sound.music.time >= vocals.length)

@@ -138,7 +138,7 @@ class TitleState extends MusicBeatState
 		#if FREEPLAY
 		MusicBeatState.switchState(MusicBeatState.getClassFromStateMap("FreeplayState"));
 		#elseif CHARTING
-		MusicBeatState.switchState(new ChartingState());
+		MusicBeatState.switchState(new ChartingState(0));
 		#else
 		if(FlxG.save.data.flashing == null && !FlashingState.leftState)
 		{
