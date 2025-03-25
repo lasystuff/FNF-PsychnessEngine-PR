@@ -1146,7 +1146,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 					for (i in 0...curRenderedNotes.members.length)
 					{
 						var note:MetaNote = curRenderedNotes.members[i];
-						if (!note.mustPress)
+						if (!note.mustPress && !(note is EventMetaNote))
 							noteArray.push(note);
 						else
 							note.colorTransform.redMultiplier = note.colorTransform.greenMultiplier = note.colorTransform.blueMultiplier = 1;
@@ -1163,7 +1163,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 					for (i in 0...curRenderedNotes.members.length)
 					{
 						var note:MetaNote = curRenderedNotes.members[i];
-						if (note.mustPress)
+						if (note.mustPress && !(note is EventMetaNote))
 							noteArray.push(note);
 						else
 							note.colorTransform.redMultiplier = note.colorTransform.greenMultiplier = note.colorTransform.blueMultiplier = 1;
