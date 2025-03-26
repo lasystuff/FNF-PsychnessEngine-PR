@@ -5,7 +5,7 @@ _____________________________________
 
 このエンジンは、[Psych Engine](https://github.com/ShadowMario/FNF-PsychEngine) 1.0.3を改造し、様々な機能を追加したちょっぴり上級者向けのエンジンです。
 
-上のLogoがCodename Engineのパクリとか言わないでくださいね？！　Logo作るのも大変なんですから！
+上のLogoが[Codename Engine](https://github.com/CodenameCrew/CodenameEngine)のパクリとか言わないでくださいね？！　Logo作るのも大変なんですから！
 
 ## ビルドするには？
 Psych Engineと変わらないはずです！
