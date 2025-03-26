@@ -1,7 +1,11 @@
 _____________________________________
 
 # Friday Night Funkin' - Psychness Engine
+![image](https://github.com/user-attachments/assets/5f16e995-5e3b-4802-8f79-bc4a98a40449)
+
 このエンジンは、[Psych Engine](https://github.com/ShadowMario/FNF-PsychEngine) 1.0.3を改造し、様々な機能を追加したちょっぴり上級者向けのエンジンです。
+
+上のLogoが[Codename Engine](https://github.com/CodenameCrew/CodenameEngine)のパクリとか言わないでくださいね？！　Logo作るのも大変なんですから！
 
 ## ビルドするには？
 Psych Engineと変わらないはずです！
@@ -27,6 +31,11 @@ Psych Engineと変わらないはずです！
 
 - Main MenuでLuaが使用可能
 - Custom Stateで0からLuaでStateを組み立てることが可能 (上のgifもこれで作られました!)
+
+### Modの個性をさらに目立たせよう！
+![Screenshot-2025-03-27 015755](https://github.com/user-attachments/assets/55446fba-dd93-425b-a798-b728c599727d)
+- `pack.json`と同じルートに`header.png`という名前の画像フォルダを入れてみてください！
+  上の画像のように表示させるはずです！ (サイズは1280 × 720をおすすめします。)
 
 ## クレジット:
 
