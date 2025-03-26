@@ -1060,7 +1060,8 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 				return;
 			}
 			else if(FlxG.keys.pressed.CONTROL && !isMovingNotes && (FlxG.keys.justPressed.Z || FlxG.keys.justPressed.Y || FlxG.keys.justPressed.X ||
-				FlxG.keys.justPressed.C || FlxG.keys.justPressed.V || FlxG.keys.justPressed.A || FlxG.keys.justPressed.S || FlxG.keys.justPressed.O || FlxG.keys.justPressed.P))
+				FlxG.keys.justPressed.C || FlxG.keys.justPressed.V || FlxG.keys.justPressed.A || FlxG.keys.justPressed.S ||
+				FlxG.keys.justPressed.O || FlxG.keys.justPressed.P || FlxG.keys.justPressed.E))
 			{
 				canContinue = false;
 				if(FlxG.keys.justPressed.Z)
@@ -1164,6 +1165,23 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 					{
 						var note:MetaNote = curRenderedNotes.members[i];
 						if (note.mustPress && !(note is EventMetaNote))
+							noteArray.push(note);
+						else
+							note.colorTransform.redMultiplier = note.colorTransform.greenMultiplier = note.colorTransform.blueMultiplier = 1;
+					}
+					selectedNotes = noteArray.copy();
+					addUndoAction(SELECT_NOTE, {old: sel, current: selectedNotes.copy()});
+					onSelectNote();
+					trace('Notes selected: ' + selectedNotes.length);
+				}
+				else if(FlxG.keys.justPressed.E) // Select All Event Notes (Ctrl + E)
+				{
+					var sel = selectedNotes;
+					var noteArray:Array<MetaNote> = [];
+					for (i in 0...curRenderedNotes.members.length)
+					{
+						var note:MetaNote = curRenderedNotes.members[i];
+						if (note is EventMetaNote)
 							noteArray.push(note);
 						else
 							note.colorTransform.redMultiplier = note.colorTransform.greenMultiplier = note.colorTransform.blueMultiplier = 1;
@@ -3062,8 +3080,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		var duetSectionButton:PsychUIButton = new PsychUIButton(objX + 100, objY, 'Duet Section', function()
 		{
 			var side:Int = -1;
-			var targetNotes = (selectedNotes.length >= 1 ? selectedNotes : curRenderedNotes.members);
-			for (note in targetNotes)
+			for (note in curRenderedNotes.members)
 			{
 				if(note == null || note.isEvent) continue;
 
@@ -3079,22 +3096,8 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 				else side = Math.floor(note.songData[1] / GRID_COLUMNS_PER_PLAYER);
 			}
 
-			// Check if there are notes on the other side
-			for (note in curRenderedNotes.members)
-			{
-				if (targetNotes == selectedNotes && selectedNotes.length < 1)
-					return;
-
-				for (targetNote in targetNotes)
-					if((note.songData[1] == targetNote.songData[1] + GRID_COLUMNS_PER_PLAYER || note.songData[1] == targetNote.songData[1] - GRID_COLUMNS_PER_PLAYER) && (note.songData[0] == targetNote.songData[0]))
-					{
-						showOutput('You cannot press this button with notes on more than one side.');
-						return;
-					}
-			}
-
 			var pushedNotes:Array<MetaNote> = [];
-			for (note in targetNotes)
+			for (note in curRenderedNotes.members)
 			{
 				if(note == null || note.isEvent) continue;
 
