@@ -368,11 +368,8 @@ class ModsMenuState extends MusicBeatState
 
 				return;
 			}
-			
-			if (index == 0)
-				resetGame();
 				
-			if (index == 1)
+			if (index == 0 || index == 1)
 			{
 				resetGame();
 			}

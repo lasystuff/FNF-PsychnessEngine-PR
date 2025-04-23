@@ -41,6 +41,7 @@ class ModsWarningSubstate extends MusicBeatSubstate
 		descriptionTxt.alpha = 0;
 		add(descriptionTxt);
 
+		modList.sort(function(a, b) return Reflect.compare(a, b));
 		var str:String = '';
 		for (i in 0...modList.length)
 			if (i == modList.length - 1)
