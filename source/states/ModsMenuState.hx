@@ -15,6 +15,8 @@ import options.ModSettingsSubState;
 import openfl.display.BitmapData;
 import lime.utils.Assets;
 
+import substates.ModsWarningSubstate;
+
 class ModsMenuState extends MusicBeatState
 {
 	var bg:FlxSprite;
@@ -327,29 +329,58 @@ class ModsMenuState extends MusicBeatState
 	{
 		if(controls.BACK && hoveringOnMods)
 		{
-			saveTxt();
+			var modList:Array<String> = [];
 
-			FlxG.sound.play(Paths.sound('cancelMenu'));
-			if(waitingToRestart)
+			var index:Int = 0;
+			for (mod in modsList.enabled)
 			{
-				//MusicBeatState.switchState(MusicBeatState.getClassFromStateMap("TitleState"));
-				TitleState.initialized = false;
-				TitleState.closedState = false;
-				MainMenuState.menuSong = "freakyMenu";
-				FlxG.sound.music.fadeOut(0.3);
-				if(FreeplayState.vocals != null)
+				if (modsGroup.members[modsList.all.indexOf(mod)].competitionWarning)
 				{
-					FreeplayState.vocals.fadeOut(0.3);
-					FreeplayState.vocals = null;
+					index++;
+					modList.push(modsGroup.members[modsList.all.indexOf(mod)].folder);
 				}
-				FlxG.camera.fade(FlxColor.BLACK, 0.5, false, FlxG.resetGame, false);
 			}
-			else MusicBeatState.switchState(new MainMenuState());
 
-			persistentUpdate = false;
-			FlxG.autoPause = ClientPrefs.data.autoPause;
-			FlxG.mouse.visible = false;
-			return;
+			function resetGame()
+			{
+				saveTxt();
+
+				FlxG.sound.play(Paths.sound('cancelMenu'));
+				if(waitingToRestart)
+				{
+					//MusicBeatState.switchState(MusicBeatState.getClassFromStateMap("TitleState"));
+					TitleState.initialized = false;
+					TitleState.closedState = false;
+					MainMenuState.menuSong = "freakyMenu";
+					FlxG.sound.music.fadeOut(0.3);
+					if(FreeplayState.vocals != null)
+					{
+						FreeplayState.vocals.fadeOut(0.3);
+						FreeplayState.vocals = null;
+					}
+					FlxG.camera.fade(FlxColor.BLACK, 0.5, false, FlxG.resetGame, false);
+				}
+				else MusicBeatState.switchState(new MainMenuState());
+	
+				persistentUpdate = false;
+				FlxG.autoPause = ClientPrefs.data.autoPause;
+				FlxG.mouse.visible = false;
+
+				return;
+			}
+			
+			if (index == 0)
+				resetGame();
+				
+			if (index == 1)
+			{
+				resetGame();
+			}
+			else
+			{
+				persistentUpdate = false;
+				openSubState(new ModsWarningSubstate(modList, resetGame));
+			}
 		}
 
 		if(Math.abs(FlxG.mouse.deltaX) > 10 || Math.abs(FlxG.mouse.deltaY) > 10)

@@ -686,6 +686,12 @@ class FunkinLua {
 			}
 			return released;
 		});
+		Lua_helper.add_callback(lua, "mouseOverlaps", function(object:String) {
+			if (object == null || object.length < 1)
+				return false;
+
+			return FlxG.mouse.overlaps(game.getLuaObject(object));
+		});
 
 		Lua_helper.add_callback(lua, "cancelTween", function(tag:String) LuaUtils.cancelTween(tag));
 

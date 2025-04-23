@@ -314,7 +314,9 @@ class MusicBeatState extends FlxState
 	public var introSoundsSuffix:String = '';
 
 	public function getLuaObject(tag:String):Dynamic
+	{
 		return variables.get(tag);
+	}
 
 	#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
 	public function addTextToDebug(text:String, color:FlxColor) {
