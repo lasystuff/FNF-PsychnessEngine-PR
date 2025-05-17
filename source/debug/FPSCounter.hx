@@ -58,6 +58,7 @@ class FPSCounter extends TextField
 		this.x = x;
 		this.y = y;
 
+		backgroundColor = 0xFF000000;
 		currentFPS = 0;
 		selectable = true;
 		mouseEnabled = true;
@@ -137,7 +138,7 @@ class FPSCounter extends TextField
 		if (FlxG.mouse.x >= x && FlxG.mouse.x <= x + width && FlxG.mouse.y >= y && FlxG.mouse.y <= y + height)
 			alpha = 1;
 		else
-			alpha = 0.75;
+			alpha = 0.5;
 	}
 
 	public static var curDisplay:Int = 0;
@@ -148,20 +149,30 @@ class FPSCounter extends TextField
 		switch (curDisplay)
 		{
 			case 0:
-				text = 'FPS: ${currentFPS}'
-					+ '\nMemory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)} / ${flixel.util.FlxStringUtil.formatBytes(maxMemoryMegas)}'
-					+ '\nState: ${Type.getClassName(Type.getClass(FlxG.state))}'
-					+ '\n'
-					+ '\nMax Caption Memory: ${flixel.util.FlxStringUtil.formatBytes(maxWindowsMemory)}'
-					+ '\nCaption: ${windowsVersion}'
-					+ '\n'
-					+ '\nCPU: ${windowsCPU}'
-					+ '\nGPU: ${windowsGPU}';
+				@:privateAccess
+				{
+					text = 'FPS: ${currentFPS}'
+						+ '\nMemory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)} / ${flixel.util.FlxStringUtil.formatBytes(maxMemoryMegas)}'
+						+ '\n'
+						+ '\nState: ${Type.getClassName(Type.getClass(FlxG.state))}'
+						+ '\nObjects: ${FlxG.state.members.length}'
+						+ '\n'
+						+ '\nRunning Lua Sctipts: ${MusicBeatState.instance.luaArray.length}'
+						+ '\nRunning Haxe Sctipts: ${MusicBeatState.instance.hscriptArray.length}'
+						+ '\n'
+						+ '\nMax Caption Memory: ${flixel.util.FlxStringUtil.formatBytes(maxWindowsMemory)}'
+						+ '\nCaption: ${windowsVersion}'
+						+ '\nCPU: ${windowsCPU}'
+						+ '\nGPU: ${windowsGPU}';
+				}
+				background = true;
 			case 1:
 				text = 'FPS: ${currentFPS}'
 					+ '\nMemory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)} / ${flixel.util.FlxStringUtil.formatBytes(maxMemoryMegas)}';
+				background = false;
 			case 2:
 				text = '';
+				background = false;
 		}
 
 		textColor = 0xFFFFFFFF;

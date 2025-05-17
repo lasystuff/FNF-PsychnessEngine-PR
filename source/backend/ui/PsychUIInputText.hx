@@ -32,7 +32,7 @@ enum abstract CaseMode(Int) from Int from UInt to Int to UInt
 	var LOWER_CASE:Int = 2;
 }
 
-class PsychUIInputText extends FlxSpriteGroup
+class PsychUIInputText extends PsychUISpriteGroup
 {
 	public static final CHANGE_EVENT = "inputtext_change";
 

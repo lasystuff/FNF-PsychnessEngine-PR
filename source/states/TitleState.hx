@@ -90,22 +90,10 @@ class TitleState extends MusicBeatState
 		
 		instance = this;
 
-		if(!initialized)
-		{
-			ClientPrefs.loadPrefs();
-			Language.reloadPhrases();
-			MusicBeatState.resetStateMap();
-		}
-
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
 		if(!initialized)
 		{
-			if(FlxG.save.data != null && FlxG.save.data.fullscreen)
-			{
-				FlxG.fullscreen = FlxG.save.data.fullscreen;
-				//trace('LOADED FULLSCREEN SETTING!!');
-			}
 			persistentUpdate = true;
 			persistentDraw = true;
 		}
@@ -134,7 +122,6 @@ class TitleState extends MusicBeatState
 			return;
 		}
 
-		FlxG.mouse.visible = false;
 		#if FREEPLAY
 		MusicBeatState.switchState(MusicBeatState.getClassFromStateMap("FreeplayState"));
 		#elseif CHARTING
@@ -165,11 +152,14 @@ class TitleState extends MusicBeatState
 	var titleText:FlxSprite;
 	var swagShader:ColorSwap = null;
 
+	var startedIntro:Bool = false;
+
 	function startIntro()
 	{
 		persistentUpdate = true;
+		startedIntro = true;
 
-		if (!initialized && FlxG.sound.music == null)
+		if (!initialized)
 			FlxG.sound.playMusic(Paths.music(MainMenuState.menuSong), 0);
 
 		loadJsonData();
@@ -377,7 +367,7 @@ class TitleState extends MusicBeatState
 	{
 		callOnScripts('onUpdate', [elapsed]);
 
-		if (FlxG.sound.music != null)
+		if (startedIntro)
 			Conductor.songPosition = FlxG.sound.music.time;
 		// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);
 

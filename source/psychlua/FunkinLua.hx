@@ -3,6 +3,7 @@ package psychlua;
 
 import backend.WeekData;
 import backend.Highscore;
+import backend.StageData;
 import backend.Song;
 
 import openfl.Lib;
@@ -1690,6 +1691,59 @@ class FunkinLua {
 		Lua_helper.add_callback(lua, "resetStateMap", function() {
 			MusicBeatState.resetStateMap();
 			return true;
+		});
+
+		Lua_helper.add_callback(lua, "loadWeek", function(?name:String = null, ?difficultyNum:Int = -1) {
+			if(name == null || name.length < 1)
+				name = WeekData.getCurrentWeek().weekName;
+			if (difficultyNum == -1)
+				difficultyNum = PlayState.storyDifficulty;
+
+			WeekData.reloadWeekFiles(true);
+
+			@:privateAccess
+			{
+				var path:String = Paths.getPath('weeks/$name.json', TEXT, null, true);
+				var weekFile:WeekFile = WeekData.getWeekFile(path);
+				trace(path);
+
+				var songArray:Array<String> = [];
+				var leWeek:Array<Dynamic> = weekFile.songs;
+				for (i in 0...leWeek.length) {
+					songArray.push(leWeek[i][0]);
+				}
+
+				PlayState.storyPlaylist = songArray;
+				PlayState.isStoryMode = true;
+
+				var diffic = Difficulty.getFilePath(difficultyNum);
+				if(diffic == null) diffic = '';
+
+				PlayState.storyDifficulty = difficultyNum;
+
+				Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + diffic, PlayState.storyPlaylist[0].toLowerCase());
+				PlayState.campaignScore = 0;
+				PlayState.campaignMisses = 0;
+			}
+
+			var directory = StageData.forceNextDirectory;
+			LoadingState.loadNextDirectory();
+			StageData.forceNextDirectory = directory;
+
+			@:privateAccess
+			if(PlayState._lastLoadedModDirectory != Mods.currentModDirectory)
+			{
+				trace('CHANGED MOD DIRECTORY, RELOADING STUFF');
+				Paths.freeGraphicsFromMemory();
+			}
+			LoadingState.prepareToSong();
+			#if !SHOW_LOADING_SCREEN FlxG.sound.music.stop(); #end
+			LoadingState.loadAndSwitchState(new PlayState(), true);
+			FreeplayState.destroyFreeplayVocals();
+			
+			#if (MODS_ALLOWED && DISCORD_ALLOWED)
+			DiscordClient.loadModRPC();
+			#end
 		});
 		//
 
