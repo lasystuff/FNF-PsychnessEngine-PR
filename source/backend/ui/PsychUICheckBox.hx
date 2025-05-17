@@ -1,6 +1,6 @@
 package backend.ui;
 
-class PsychUICheckBox extends FlxSpriteGroup
+class PsychUICheckBox extends PsychUISpriteGroup
 {
 	public static final CLICK_EVENT = 'checkbox_click';
 

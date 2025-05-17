@@ -2,7 +2,7 @@ package backend.ui;
 
 import backend.ui.PsychUIBox.UIStyleData;
 
-class PsychUIButton extends FlxSpriteGroup
+class PsychUIButton extends PsychUISpriteGroup
 {
 	public static final CLICK_EVENT = 'button_click';
 

@@ -1,6 +1,6 @@
 package backend.ui;
 
-class PsychUISlider extends FlxSpriteGroup
+class PsychUISlider extends PsychUISpriteGroup
 {
 	public static final CHANGE_EVENT = "slider_change";
 	public var bar:FlxSprite;
