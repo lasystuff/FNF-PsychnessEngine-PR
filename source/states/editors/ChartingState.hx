@@ -68,8 +68,6 @@ enum abstract WaveformTarget(String)
 
 class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychUIEvent
 {
-	public static var instance:ChartingState;
-
 	public static final defaultEvents:Array<Array<String>> =
 	[
 		['', "Nothing. Yep, that's right."], //Always leave this one empty pls
@@ -209,8 +207,6 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		super();
 	}
 
-	public var descriptionGroup:FlxTypedGroup<PsychUIDescription> = new FlxTypedGroup<PsychUIDescription>();
-
 	var bg:FlxSprite;
 	var theme:ChartingTheme = DEFAULT;
 
@@ -230,8 +226,6 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 
 	override function create()
 	{
-		instance = this;
-
 		if(Difficulty.list.length < 1) Difficulty.resetList();
 		_keysPressedBuffer.resize(keysArray.length);
 
@@ -572,9 +566,6 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		].join('\n');
 		fullTipText.screenCenter();
 		add(fullTipText);
-
-		descriptionGroup.camera = camUI;
-		add(descriptionGroup);
 
 		Main.onClose = function()
 		{
@@ -1065,6 +1056,12 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 			var canContinue:Bool = true;
 			if(FlxG.keys.justPressed.ENTER)
 			{
+				if (FlxG.keys.pressed.SHIFT)
+				{
+					PlayState.startOnTime = Conductor.songPosition;
+					goToPlayState();
+					return;
+				}
 				goToPlayState();
 				return;
 			}
@@ -4435,6 +4432,16 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		btn.text.alignment = LEFT;
 		tab_group.add(btn);
 
+		btnY += 20;
+		var btn:PsychUIButton = new PsychUIButton(btnX, btnY, '  Playtest here...', function()
+		{
+			PlayState.startOnTime = Conductor.songPosition;
+			goToPlayState();
+		}, btnWid);
+		btn.description = 'Playtest here (Shift + Enter)\n- Start Playtest here\n- Shortcut: Shift + Enter';
+		btn.text.alignment = LEFT;
+		tab_group.add(btn);
+
 		btnY++;
 		btnY += 20;
 		var btn:PsychUIButton = new PsychUIButton(btnX, btnY, '  Exit', function()
@@ -5300,7 +5307,6 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		Lib.application.window.title = '${Lib.application.meta["name"]}';
 		Main.onClose = null;
 		super.destroy();
-		instance = null;
 	}
 
 	function loadFileList(mainFolder:String, ?optionalList:String = null, ?fileTypes:Array<String> = null)

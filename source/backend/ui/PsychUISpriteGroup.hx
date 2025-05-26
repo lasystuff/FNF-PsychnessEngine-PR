@@ -11,7 +11,6 @@ class PsychUISpriteGroup extends FlxSpriteGroup
 
 		descriptionBox = new PsychUIDescription(0, 0, description);
 		descriptionBox.visible = false;
-		states.editors.ChartingState.instance.descriptionGroup.add(descriptionBox);
 	}
 
 	var _overlapTimer:Float = 0;
@@ -30,6 +29,12 @@ class PsychUISpriteGroup extends FlxSpriteGroup
 			if (description.length < 1)
 				return;
 
+			if (!FlxG.state.members.contains(descriptionBox))
+			{
+				FlxG.state.add(descriptionBox);
+				descriptionBox.cameras = cameras;
+			}
+
 			if (!descriptionBox.visible)
 			{
 				descriptionBox.x = FlxG.stage.mouseX + 15;
@@ -39,7 +44,11 @@ class PsychUISpriteGroup extends FlxSpriteGroup
 			descriptionBox.visible = true;
 		}
 		else
+		{
 			descriptionBox.visible = false;
+			if (FlxG.state.members.contains(descriptionBox))
+				FlxG.state.remove(descriptionBox);
+		}
 	}
 
 	function set_description(v:String)

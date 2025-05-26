@@ -331,6 +331,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 				trace('created ghost image');
 			}
 		});
+		makeGhostButton.description = 'Make Ghost\n- Make Ghost in the\n   current character/current offset/current frame';
 
 		/*hideGhostButton = new PsychUIButton(20 + makeGhostButton.width, makeGhostButton.y, "Hide Ghost", function() {
 			ghost.visible = false;
@@ -354,6 +355,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 				animateGhost.colorTransform.blueOffset = value;
 			}
 		};
+		highlightGhost.description = 'ON/OFF Highlight Ghost';
 
 		var ghostAlphaSlider:PsychUISlider = new PsychUISlider(15, makeGhostButton.y + 25, function(v:Float)
 		{
@@ -362,6 +364,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 			if(animateGhost != null) animateGhost.alpha = ghostAlpha;
 
 		}, ghostAlpha, 0, 1);
+		ghostAlphaSlider.description = 'Ghost Opacity';
 		ghostAlphaSlider.label = 'Opacity:';
 
 		tab_group.add(makeGhostButton);
@@ -385,6 +388,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 			updateCharacterPositions();
 			updatePointerPos(false);
 		};
+		check_player.description = 'Playable Character\n- Whether character is a\n   Playable Character';
 
 		var reloadCharacter:PsychUIButton = new PsychUIButton(140, 20, "Reload Char", function()
 		{
@@ -393,6 +397,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 			reloadCharacterOptions();
 			reloadCharacterDropDown();
 		});
+		reloadCharacter.description = 'Reload Character';
 
 		var templateCharacter:PsychUIButton = new PsychUIButton(140, 50, "Load Template", function()
 		{
@@ -428,6 +433,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 			reloadCharacterDropDown();
 			updateHealthBar();
 		});
+		templateCharacter.description = 'Load Template\n- Load character template\n   with basic animations';
 		templateCharacter.normalStyle.bgColor = FlxColor.RED;
 		templateCharacter.normalStyle.textColor = FlxColor.WHITE;
 
@@ -457,6 +463,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 			}
 		});
+		charDropDown.description = 'Character';
 		reloadCharacterDropDown();
 		charDropDown.selectedLabel = _char;
 
@@ -478,10 +485,15 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		var tab_group = UI_characterbox.getTab('Animations').menu;
 
 		animationInputText = new PsychUIInputText(15, 85, 80, '', 8);
+		animationInputText.description = 'Animation name';
 		animationNameInputText = new PsychUIInputText(animationInputText.x, animationInputText.y + 35, 150, '', 8);
+		animationNameInputText.description = 'Animation Symbol Name/Tag';
 		animationIndicesInputText = new PsychUIInputText(animationNameInputText.x, animationNameInputText.y + 40, 250, '', 8);
+		animationIndicesInputText.description = 'ADVANCED - Animation Indices';
 		animationFramerate = new PsychUINumericStepper(animationInputText.x + 170, animationInputText.y, 1, 24, 0, 240, 0);
+		animationFramerate.description = 'Framerate';
 		animationLoopCheckBox = new PsychUICheckBox(animationNameInputText.x + 170, animationNameInputText.y - 1, "Should it Loop?", 100);
+		animationLoopCheckBox.description = 'Should it Loop?';
 
 		animationDropDown = new PsychUIDropDownMenu(15, animationInputText.y - 55, [''], function(selectedAnimation:Int, pressed:String) {
 			var anim:AnimArray = character.animationsArray[selectedAnimation];
@@ -493,6 +505,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 			var indicesStr:String = anim.indices.toString();
 			animationIndicesInputText.text = indicesStr.substr(1, indicesStr.length - 2);
 		});
+		animationDropDown.description = 'Animations';
 
 		var addUpdateButton:PsychUIButton = new PsychUIButton(70, animationIndicesInputText.y + 60, "Add/Update", function() {
 			var indicesText:String = animationIndicesInputText.text.trim();
@@ -552,6 +565,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 			character.playAnim(addedAnim.anim, true);
 			trace('Added/Updated animation: ' + animationInputText.text);
 		});
+		addUpdateButton.description = 'Add/Update\n- Add/Update current Animation';
 
 		var removeButton:PsychUIButton = new PsychUIButton(180, animationIndicesInputText.y + 60, "Remove", function() {
 			for (anim in character.animationsArray)
@@ -576,6 +590,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 					break;
 				}
 		});
+		removeButton.description = 'Remove\n- Remove current Animation';
 		reloadAnimList();
 		animationDropDown.selectedLabel = anims[0] != null ? anims[0].anim : '';
 
@@ -617,6 +632,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		var tab_group = UI_characterbox.getTab('Character').menu;
 
 		imageInputText = new PsychUIInputText(15, 30, 200, character.imageFile, 8);
+		imageInputText.description = 'Image file name\n- Image file name (images/)';
 		var reloadImage:PsychUIButton = new PsychUIButton(imageInputText.x + 210, imageInputText.y - 3, "Reload Image", function()
 		{
 			var lastAnim = character.getAnimationName();
@@ -626,6 +642,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 				character.playAnim(lastAnim, true);
 			}
 		});
+		reloadImage.description = 'Reload Image\n- Reload Character Image';
 
 		var decideIconColor:PsychUIButton = new PsychUIButton(reloadImage.x, reloadImage.y + 30, "Get Icon Color", function()
 			{
@@ -635,14 +652,19 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 				character.healthColorArray[2] = coolColor.blue;
 				updateHealthBar();
 			});
+		decideIconColor.description = 'Get Icon Color\n- Get and apply current Icon Color';
 
 		healthIconInputText = new PsychUIInputText(15, imageInputText.y + 35, 75, healthIcon.getCharacter(), 8);
+		healthIconInputText.description = 'Health icon name\n- Health icon image file name (images/icons/)';
 
 		vocalsInputText = new PsychUIInputText(15, healthIconInputText.y + 35, 75, character.vocalsFile != null ? character.vocalsFile : '', 8);
+		vocalsInputText.description = 'Vocals File Postfix';
 
 		singDurationStepper = new PsychUINumericStepper(15, vocalsInputText.y + 45, 0.1, 4, 0, 999, 1);
+		singDurationStepper.description = 'Sing Animation length\n- Default: 4';
 
 		scaleStepper = new PsychUINumericStepper(15, singDurationStepper.y + 40, 0.1, 1, 0.05, 10, 2);
+		scaleStepper.description = 'Scale\n- Character Scale';
 
 		flipXCheckBox = new PsychUICheckBox(singDurationStepper.x + 80, singDurationStepper.y, "Flip X", 50);
 		flipXCheckBox.checked = character.flipX;
@@ -651,6 +673,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 			character.originalFlipX = !character.originalFlipX;
 			character.flipX = (character.originalFlipX != character.isPlayer);
 		};
+		flipXCheckBox.description = 'Flip X\n- ON/OFF Flip X';
 
 		noAntialiasingCheckBox = new PsychUICheckBox(flipXCheckBox.x, flipXCheckBox.y + 40, "No Antialiasing", 80);
 		noAntialiasingCheckBox.checked = character.noAntialiasing;
@@ -661,20 +684,29 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 			}
 			character.noAntialiasing = noAntialiasingCheckBox.checked;
 		};
+		noAntialiasingCheckBox.description = 'No Antialiasing\n- ON/OFF Antialiasing';
 
 		positionXStepper = new PsychUINumericStepper(flipXCheckBox.x + 110, flipXCheckBox.y, 10, character.positionArray[0], -9000, 9000, 0);
+		positionXStepper.description = 'Character X';
 		positionYStepper = new PsychUINumericStepper(positionXStepper.x + 70, positionXStepper.y, 10, character.positionArray[1], -9000, 9000, 0);
+		positionYStepper.description = 'Character Y';
 
 		positionCameraXStepper = new PsychUINumericStepper(positionXStepper.x, positionXStepper.y + 40, 10, character.cameraPosition[0], -9000, 9000, 0);
+		positionCameraXStepper.description = 'Camera X';
 		positionCameraYStepper = new PsychUINumericStepper(positionYStepper.x, positionYStepper.y + 40, 10, character.cameraPosition[1], -9000, 9000, 0);
+		positionCameraYStepper.description = 'Camera Y';
 
 		var saveCharacterButton:PsychUIButton = new PsychUIButton(reloadImage.x, noAntialiasingCheckBox.y + 40, "Save Character", function() {
 			saveCharacter();
 		});
+		saveCharacterButton.description = 'Save Character';
 
 		healthColorStepperR = new PsychUINumericStepper(singDurationStepper.x, saveCharacterButton.y, 20, character.healthColorArray[0], 0, 255, 0);
+		healthColorStepperR.description = 'Health Bar Color (Red)';
 		healthColorStepperG = new PsychUINumericStepper(singDurationStepper.x + 65, saveCharacterButton.y, 20, character.healthColorArray[1], 0, 255, 0);
+		healthColorStepperG.description = 'Health Bar Color (Green)';
 		healthColorStepperB = new PsychUINumericStepper(singDurationStepper.x + 130, saveCharacterButton.y, 20, character.healthColorArray[2], 0, 255, 0);
+		healthColorStepperB.description = 'Health Bar Color (Blue)';
 
 		tab_group.add(new FlxText(15, imageInputText.y - 18, 100, 'Image file name:'));
 		tab_group.add(new FlxText(15, healthIconInputText.y - 18, 100, 'Health icon name:'));

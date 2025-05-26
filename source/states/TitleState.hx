@@ -45,7 +45,7 @@ class TitleState extends MusicBeatState
 	public static var volumeUpKeys:Array<FlxKey> = [FlxKey.NUMPADPLUS, FlxKey.PLUS];
 
 	public static var initialized:Bool = false;
-	public static var checkForStateMap:Bool = false;
+	// public static var checkForStateMap:Bool = false;
 
 	var credGroup:FlxGroup = new FlxGroup();
 	var textGroup:FlxGroup = new FlxGroup();
@@ -103,24 +103,24 @@ class TitleState extends MusicBeatState
 			StoryMenuState.weekCompleted = FlxG.save.data.weekCompleted;
 		}
 
-		if (!checkForStateMap)
-		{
-			checkForStateMap = true;
+		// if (!checkForStateMap)
+		// {
+		// 	checkForStateMap = true;
 
-			new FlxTimer().start(1, function(timer:FlxTimer)
-			{
-				if (controls.pressed('debug_1'))
-				{
-					MasterEditorMenu.showConsole();
-					MasterEditorMenu.clearScreen();
-				}
+		// 	new FlxTimer().start(1, function(timer:FlxTimer)
+		// 	{
+		// 		if (controls.pressed('debug_1'))
+		// 		{
+		// 			MasterEditorMenu.showConsole();
+		// 			MasterEditorMenu.clearScreen();
+		// 		}
 
-				FlxTransitionableState.skipNextTransOut = true;
-				FlxG.switchState(MusicBeatState.getClassFromStateMap("TitleState"));
-			});
+		// 		FlxTransitionableState.skipNextTransOut = true;
+		// 		FlxG.switchState(MusicBeatState.getClassFromStateMap("TitleState"));
+		// 	});
 
-			return;
-		}
+		// 	return;
+		// }
 
 		#if FREEPLAY
 		MusicBeatState.switchState(MusicBeatState.getClassFromStateMap("FreeplayState"));

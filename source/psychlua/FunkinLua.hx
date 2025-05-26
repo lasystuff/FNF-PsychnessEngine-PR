@@ -1693,9 +1693,66 @@ class FunkinLua {
 			return true;
 		});
 
+		Lua_helper.add_callback(lua, "makeLuaCamera", function(tag:String = null, ?x:Float = 0, y:Float = 0, width:Int = null, height:Int = null, zoom:Float = 1) {
+			tag = tag.replace('.', '');
+			LuaUtils.destroyObject(tag);
+			var camera:FlxCamera = new FlxCamera(x, y, width, height, zoom);
+			MusicBeatState.getVariables().set(tag, camera);
+			camera.active = true;
+		});
+
+		Lua_helper.add_callback(lua, "addLuaCamera", function(tag:String = null, defaultDrawTarget:Bool = false) {
+			tag = tag.replace('.', '');
+			var camera:FlxCamera = LuaUtils.cameraFromString(tag);
+			if (camera != null)
+			{
+				FlxG.cameras.add(camera, defaultDrawTarget);
+				return;
+			}
+		});
+
+		Lua_helper.add_callback(lua, "getCameraOrder", function(tag:String = null) {
+			tag = tag.replace('.', '');
+			var camera:FlxCamera = LuaUtils.cameraFromString(tag);
+			if (camera != null)
+			{
+				return FlxG.cameras.list.indexOf(camera);
+			}
+			luaTrace('getCameraOrder: Camera $camera doesn\'t exist!', false, false, FlxColor.RED);
+			return -1;
+		});
+
+		Lua_helper.add_callback(lua, "setCameraOrder", function(tag:String = null, position:Int, defaultDrawTarget:Bool = false) {
+			tag = tag.replace('.', '');
+			var camera:FlxCamera = LuaUtils.cameraFromString(tag);
+			if (camera != null)
+			{
+				@:privateAccess
+				{
+					var cameras = [
+						for (i in FlxG.cameras.list)
+						{
+							camera: i,
+							defaultDraw: FlxG.cameras.defaults.contains(i)
+						}
+					];
+
+					for (i in cameras)
+						FlxG.cameras.remove(i.camera, false);
+
+					cameras.insert(position, {camera: camera, defaultDraw: defaultDrawTarget});
+
+					for (i in cameras)
+						FlxG.cameras.add(i.camera, i.defaultDraw);
+				}
+				return;
+			}
+			luaTrace('setCameraOrder: Camera $camera doesn\'t exist!', false, false, FlxColor.RED);
+		});
+
 		Lua_helper.add_callback(lua, "loadWeek", function(?name:String = null, ?difficultyNum:Int = -1) {
 			if(name == null || name.length < 1)
-				name = WeekData.getCurrentWeek().weekName;
+				name = WeekData.getCurrentWeek().fileName;
 			if (difficultyNum == -1)
 				difficultyNum = PlayState.storyDifficulty;
 
@@ -1705,7 +1762,6 @@ class FunkinLua {
 			{
 				var path:String = Paths.getPath('weeks/$name.json', TEXT, null, true);
 				var weekFile:WeekFile = WeekData.getWeekFile(path);
-				trace(path);
 
 				var songArray:Array<String> = [];
 				var leWeek:Array<Dynamic> = weekFile.songs;
