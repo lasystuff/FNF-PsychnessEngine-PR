@@ -328,6 +328,17 @@ class HScript extends Iris
 				Iris.error(Printer.errorToString(e, false), this.interp.posInfos());
 			}
 		});
+
+		set("addDebugLog", function(value:Dynamic, color:Int = FlxColor.WHITE) {
+			DebugDisplay.instance.addLog(value, color);
+		});
+		set("clearDebugLog", function(value:Dynamic, color:Int = FlxColor.WHITE) {
+			DebugDisplay.instance.clearLog();
+		});
+		set("setDebugWatcher", function(display:String, value:Dynamic) {
+			MusicBeatState.instance.debugVariables.set(display, value);
+		});
+		
 		#if LUA_ALLOWED
 		set('parentLua', parentLua);
 		#else

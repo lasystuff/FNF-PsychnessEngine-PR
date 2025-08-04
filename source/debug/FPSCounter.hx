@@ -23,31 +23,7 @@ class FPSCounter extends TextField
 		The current memory usage (WARNING: this is NOT your total program memory usage, rather it shows the garbage collector memory)
 	**/
 	public var memoryMegas(get, never):Float;
-
-	/**
-		Maximum memory usage of the application
-	**/
 	public var maxMemoryMegas:Float;
-
-	/**
-		Windows maximum memory (installed RAM capacity)
-	**/
-	var maxWindowsMemory:Float;
-
-	/**
-		Windows Version
-	**/
-	var windowsVersion:String;
-
-	/**
-		Windows CPU Name
-	**/
-	var windowsCPU:String;
-
-	/**
-		Windows GPU Name
-	**/
-	var windowsGPU:String;
 
 	@:noCompletion private var times:Array<Float>;
 
@@ -71,11 +47,6 @@ class FPSCounter extends TextField
 
 		if (FlxG.save.data.displayDebugType != null)
 			curDisplay = FlxG.save.data.displayDebugType;
-
-		maxWindowsMemory = Main.getMaxWindowsMemory();
-		windowsVersion = Main.getWindowsVersion();
-		windowsCPU = Main.getCpuName();
-		windowsGPU = Main.getGpuName();
 	}
 
 	var deltaTimeout:Float = 0.0;
@@ -158,14 +129,9 @@ class FPSCounter extends TextField
 						+ '\nObjects: ${FlxG.state.members.length}'
 						+ '\n'
 						+ '\nRunning Lua Sctipts: ${MusicBeatState.instance.luaArray.length}'
-						+ '\nRunning Haxe Sctipts: ${MusicBeatState.instance.hscriptArray.length}'
-						+ '\n'
-						+ '\nMax Caption Memory: ${flixel.util.FlxStringUtil.formatBytes(maxWindowsMemory)}'
-						+ '\nCaption: ${windowsVersion}'
-						+ '\nCPU: ${windowsCPU}'
-						+ '\nGPU: ${windowsGPU}';
+						+ '\nRunning Haxe Sctipts: ${MusicBeatState.instance.hscriptArray.length}';
+					background = true;
 				}
-				background = true;
 			case 1:
 				text = 'FPS: ${currentFPS}'
 					+ '\nMemory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)} / ${flixel.util.FlxStringUtil.formatBytes(maxMemoryMegas)}';

@@ -94,7 +94,8 @@ class FlxSoundTray extends Sprite
 	public function new()
 	{
 		super();
-		background = new Bitmap(new BitmapData(_width, _height, true, 0x75000000));
+		background = new Bitmap(new BitmapData(_width, _height, true, FlxColor.BLACK));
+		background.alpha = 0.5;
 		addChild(background);
 
 		var meterBG:Bitmap = new Bitmap(new BitmapData(_width - 10, 5, true, 0x50000000));
@@ -141,13 +142,13 @@ class FlxSoundTray extends Sprite
 		text.defaultTextFormat = _dtf;
 		addChild(text);
 		text.text = displayTxt;
-		text.y = 5;
+		text.y = 3.5;
 	}
 
 	// Reloads the default text format
 	public function reloadDtf():Void
 	{
-		_dtf = new TextFormat('VCR OSD Mono', 8, 0xffffff);
+		_dtf = new TextFormat(openfl.utils.Assets.getFont(Paths.font('HackGenConsoleNF-Regular.ttf')).fontName, 8, 0xffffff);
 		_dtf.align = TextFormatAlign.CENTER;
 	}
 

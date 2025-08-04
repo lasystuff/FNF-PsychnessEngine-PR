@@ -4,6 +4,7 @@ package;
 import android.content.Context;
 #end
 
+import debug.DebugDisplay;
 import debug.FPSCounter;
 
 import flixel.graphics.FlxGraphic;
@@ -71,7 +72,7 @@ class Main extends Sprite
 		startFullscreen: false // if the game should start at fullscreen mode
 	};
 
-	public static var fpsVar:FPSCounter;
+	public static var fpsVar:DebugDisplay;
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
@@ -179,7 +180,7 @@ class Main extends Sprite
 		addChild(new FlxGame(game.width, game.height, game.initialState, game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
 
 		#if !mobile
-		fpsVar = new FPSCounter(10, 10, 0xFFFFFF);
+		fpsVar = new DebugDisplay(10, 10);
 		addChild(fpsVar);
 		Lib.current.stage.align = "tl";
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -240,88 +241,6 @@ class Main extends Sprite
 		}
 	}
 
-	/**
-		Windowsの最大メモリ (搭載RAM容量) を取得します。
-	**/
-	public static function getMaxWindowsMemory():Float
-	{
-		var proc = new Process("wmic", ["ComputerSystem", "get", "TotalPhysicalMemory"]);
-		var result = proc.stdout.readAll().toString();
-		proc.close();
-
-		return Std.parseFloat(result.split("\n")[1].trim());
-	}
-
-	/**
-		WindowsのバージョンをStringで取得します。
-	**/
-	public static function getWindowsVersion():String
-	{
-		try
-		{
-			var process = new Process("wmic", ["os", "get", "Caption"]);
-			var output = process.stdout.readAll().toString();
-			process.close();
-
-			var cleanOutput = output.split("\n").map(function(line) return line.trim()).filter(function(line) return line != "Caption" && line != "");
-
-			if (cleanOutput.length > 0)
-			{
-				return cleanOutput[0];
-			}
-			else
-			{
-				return 'Unknown';
-			}
-		}
-		catch (e:Dynamic)
-		{
-			return 'Unknown';
-		}
-
-		return 'Unknown';
-	}
-
-	/**
-		WindowsのCPUの名前を取得します
-	**/
-	public static function getCpuName():String
-	{
-		try
-		{
-			var process = new Process("wmic", ["cpu", "get", "Name"]);
-			var output = process.stdout.readAll().toString();
-			process.close();
-
-			var cleanOutput = output.split("\n").map(function(line) return line.trim()).filter(function(line) return line != "Name" && line != "");
-			return cleanOutput.length > 0 ? cleanOutput.join(', ').toString() : "Unknown";
-		}
-		catch (e:Dynamic)
-		{
-			return 'Unknown';
-		}
-	}
-
-	/**
-		WindowsのGPUの名前を取得します
-	**/
-	public static function getGpuName():String
-	{
-		try
-		{
-			var process = new Process("wmic", ["path", "win32_videocontroller", "get", "Name"]);
-			var output = process.stdout.readAll().toString();
-			process.close();
-
-			var cleanOutput = output.split("\n").map(function(line) return line.trim()).filter(function(line) return line != "Name" && line != "");
-			return cleanOutput.length > 0 ? cleanOutput.join(', ').toString() : "Unknown";
-		}
-		catch (e:Dynamic)
-		{
-			return 'Unknown';
-		}
-	}
-
 	// Code was entirely made by sqirra-rng for their fnf engine named "Izzy Engine", big props to them!!!
 	// very cool person for real they don't get enough credit for their work
 	#if CRASH_HANDLER
@@ -351,9 +270,6 @@ class Main extends Sprite
 		errMsg += "\nUncaught Error: " + e.error;
 		// remove if you're modding and want the crash log message to contain the link
 		// please remember to actually modify the link for the github page to report the issues to.
-		#if officialBuild
-		errMsg += "\nPlease report this error to the GitHub page: https://github.com/ShadowMario/FNF-PsychEngine";
-		#end
 		errMsg += "\n\n> Crash Handler written by: sqirra-rng";
 
 		if (!FileSystem.exists("./crash/"))

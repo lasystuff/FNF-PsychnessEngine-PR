@@ -132,7 +132,7 @@ class LuaUtils
 				var data:String = File.getContent(path);
 				try
 				{
-					//FunkinLua.luaTrace('getModSetting: Trying to find default value for "$saveTag" in Mod: "$modName"');
+					//DebugDisplay.instance.addLog('getModSetting: Trying to find default value for "$saveTag" in Mod: "$modName"');
 					var parsedJson:Dynamic = tjson.TJSON.parse(data);
 					for (i in 0...parsedJson.length)
 					{
@@ -143,13 +143,13 @@ class LuaUtils
 							{
 								if(sub.value != null)
 								{
-									//FunkinLua.luaTrace('getModSetting: Found unsaved value "${sub.save}" in Mod: "$modName"');
+									//DebugDisplay.instance.addLog('getModSetting: Found unsaved value "${sub.save}" in Mod: "$modName"');
 									settings.set(sub.save, sub.value);
 								}
 							}
 							else
 							{
-								//FunkinLua.luaTrace('getModSetting: Found unsaved keybind "${sub.save}" in Mod: "$modName"');
+								//DebugDisplay.instance.addLog('getModSetting: Found unsaved keybind "${sub.save}" in Mod: "$modName"');
 								settings.set(sub.save, {keyboard: (sub.keyboard != null ? sub.keyboard : 'NONE'), gamepad: (sub.gamepad != null ? sub.gamepad : 'NONE')});
 							}
 						}

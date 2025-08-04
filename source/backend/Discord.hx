@@ -50,7 +50,7 @@ class DiscordClient
 		if (discriminator != '0') //Old discriminators
 			message += '($user#$discriminator)';
 		else //New Discord IDs/Discriminator system
-			message += '($user)';
+			message += '($user)';		
 
 		trace(message);
 		changePresence();
@@ -95,6 +95,13 @@ class DiscordClient
 				}
 			});
 		}
+		
+		@:privateAccess
+		{
+			presence.__presence.button1Label = 'Psychness Engine Wiki';
+			presence.__presence.button1Url = 'https://github.com/nes0116/FNF-PsychnessEngine/wiki';
+		}
+
 		isInitialized = true;
 	}
 

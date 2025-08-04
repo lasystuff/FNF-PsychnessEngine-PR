@@ -1,5 +1,6 @@
 package psychlua;
 
+import debug.DebugDisplay;
 import flixel.util.FlxSave;
 import openfl.utils.Assets;
 
@@ -103,7 +104,7 @@ class ExtraFunctions
 				variables.set('save_$name', save);
 				return;
 			}
-			FunkinLua.luaTrace('initSaveData: Save file already initialized: ' + name);
+			DebugDisplay.instance.addLog('initSaveData: Save file already initialized: ' + name);
 		});
 		Lua_helper.add_callback(lua, "flushSaveData", function(name:String) {
 			var variables = MusicBeatState.getVariables();
@@ -112,7 +113,7 @@ class ExtraFunctions
 				variables.get('save_$name').flush();
 				return;
 			}
-			FunkinLua.luaTrace('flushSaveData: Save file not initialized: ' + name, false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog('flushSaveData: Save file not initialized: ' + name, false, false, FlxColor.RED);
 		});
 		Lua_helper.add_callback(lua, "getDataFromSave", function(name:String, field:String, ?defaultValue:Dynamic = null) {
 			var variables = MusicBeatState.getVariables();
@@ -124,7 +125,7 @@ class ExtraFunctions
 				else
 					return defaultValue;
 			}
-			FunkinLua.luaTrace('getDataFromSave: Save file not initialized: ' + name, false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog('getDataFromSave: Save file not initialized: ' + name, false, false, FlxColor.RED);
 			return defaultValue;
 		});
 		Lua_helper.add_callback(lua, "setDataFromSave", function(name:String, field:String, value:Dynamic) {
@@ -134,7 +135,7 @@ class ExtraFunctions
 				Reflect.setField(variables.get('save_$name').data, field, value);
 				return;
 			}
-			FunkinLua.luaTrace('setDataFromSave: Save file not initialized: ' + name, false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog('setDataFromSave: Save file not initialized: ' + name, false, false, FlxColor.RED);
 		});
 		Lua_helper.add_callback(lua, "eraseSaveData", function(name:String)
 		{
@@ -144,7 +145,7 @@ class ExtraFunctions
 				variables.get('save_$name').erase();
 				return;
 			}
-			FunkinLua.luaTrace('eraseSaveData: Save file not initialized: ' + name, false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog('eraseSaveData: Save file not initialized: ' + name, false, false, FlxColor.RED);
 		});
 
 		// File management
@@ -172,7 +173,7 @@ class ExtraFunctions
 
 				return true;
 			} catch (e:Dynamic) {
-				FunkinLua.luaTrace("saveFile: Error trying to save " + path + ": " + e, false, false, FlxColor.RED);
+				DebugDisplay.instance.addLog("saveFile: Error trying to save " + path + ": " + e, false, false, FlxColor.RED);
 			}
 			return false;
 		});
@@ -187,7 +188,7 @@ class ExtraFunctions
 					return true;
 				}
 			} catch (e:Dynamic) {
-				FunkinLua.luaTrace("deleteFile: Error trying to delete " + path + ": " + e, false, false, FlxColor.RED);
+				DebugDisplay.instance.addLog("deleteFile: Error trying to delete " + path + ": " + e, false, false, FlxColor.RED);
 			}
 			return false;
 		});
@@ -245,6 +246,17 @@ class ExtraFunctions
 		});
 		Lua_helper.add_callback(lua, "getRandomBool", function(chance:Float = 50) {
 			return FlxG.random.bool(chance);
+		});
+
+		Lua_helper.add_callback(lua, "addDebugLog", function(value:Dynamic, color:String = 'FFFFFF') {
+			DebugDisplay.instance.addLog(value, CoolUtil.colorFromString(color));
+		});
+		Lua_helper.add_callback(lua, "clearDebugLog", function(value:Dynamic, color:String = 'FFFFFF') {
+			DebugDisplay.instance.clearLog();
+		});
+
+		Lua_helper.add_callback(lua, "setDebugWatcher", function(display:String, value:Dynamic) {
+			MusicBeatState.instance.debugVariables.set(display, value);
 		});
 	}
 }

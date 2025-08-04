@@ -337,14 +337,14 @@ class FunkinLua {
 					for (luaInstance in game.luaArray)
 						if(luaInstance.scriptName == luaPath)
 						{
-							luaTrace('addLuaScript: The script "' + luaPath + '" is already running!');
+							DebugDisplay.instance.addLog('addLuaScript: The script "' + luaPath + '" is already running!');
 							return;
 						}
 
 				new FunkinLua(luaPath);
 				return;
 			}
-			luaTrace("addLuaScript: Script doesn't exist!", false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog("addLuaScript: Script doesn't exist!", false, false, FlxColor.RED);
 		});
 		Lua_helper.add_callback(lua, "addHScript", function(scriptFile:String, ?ignoreAlreadyRunning:Bool = false) {
 			#if HSCRIPT_ALLOWED
@@ -355,16 +355,16 @@ class FunkinLua {
 					for (script in game.hscriptArray)
 						if(script.origin == scriptPath)
 						{
-							luaTrace('addHScript: The script "' + scriptPath + '" is already running!');
+							DebugDisplay.instance.addLog('addHScript: The script "' + scriptPath + '" is already running!');
 							return;
 						}
 
 				PlayState.instance.initHScript(scriptPath);
 				return;
 			}
-			luaTrace("addHScript: Script doesn't exist!", false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog("addHScript: Script doesn't exist!", false, false, FlxColor.RED);
 			#else
-			luaTrace("addHScript: HScript is not supported on this platform!", false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog("addHScript: HScript is not supported on this platform!", false, false, FlxColor.RED);
 			#end
 		});
 		Lua_helper.add_callback(lua, "removeLuaScript", function(luaFile:String) {
@@ -384,7 +384,7 @@ class FunkinLua {
 				if(foundAny) return true;
 			}
 
-			luaTrace('removeLuaScript: Script $luaFile isn\'t running!', false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog('removeLuaScript: Script $luaFile isn\'t running!', false, false, FlxColor.RED);
 			return false;
 		});
 		Lua_helper.add_callback(lua, "removeHScript", function(scriptFile:String) {
@@ -405,10 +405,10 @@ class FunkinLua {
 				if(foundAny) return true;
 			}
 
-			luaTrace('removeHScript: Script $scriptFile isn\'t running!', false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog('removeHScript: Script $scriptFile isn\'t running!', false, false, FlxColor.RED);
 			return false;
 			#else
-			luaTrace("removeHScript: HScript is not supported on this platform!", false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog("removeHScript: HScript is not supported on this platform!", false, false, FlxColor.RED);
 			#end
 		});
 
@@ -493,14 +493,14 @@ class FunkinLua {
 					}
 					else
 					{
-						luaTrace('getObjectOrder: Group $group doesn\'t exist!', false, false, FlxColor.RED);
+						DebugDisplay.instance.addLog('getObjectOrder: Group $group doesn\'t exist!', false, false, FlxColor.RED);
 						return -1;
 					}
 				}
 				var groupOrArray:Dynamic = CustomSubstate.instance != null ? CustomSubstate.instance : LuaUtils.getTargetInstance();
 				return groupOrArray.members.indexOf(leObj);
 			}
-			luaTrace('getObjectOrder: Object $obj doesn\'t exist!', false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog('getObjectOrder: Object $obj doesn\'t exist!', false, false, FlxColor.RED);
 			return -1;
 		});
 		Lua_helper.add_callback(lua, "setObjectOrder", function(obj:String, position:Int, ?group:String = null) {
@@ -522,7 +522,7 @@ class FunkinLua {
 								groupOrArray.insert(position, leObj);
 						}
 					}
-					else luaTrace('setObjectOrder: Group $group doesn\'t exist!', false, false, FlxColor.RED);
+					else DebugDisplay.instance.addLog('setObjectOrder: Group $group doesn\'t exist!', false, false, FlxColor.RED);
 				}
 				else
 				{
@@ -532,7 +532,7 @@ class FunkinLua {
 				}
 				return;
 			}
-			luaTrace('setObjectOrder: Object $obj doesn\'t exist!', false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog('setObjectOrder: Object $obj doesn\'t exist!', false, false, FlxColor.RED);
 		});
 
 		// gay ass tweens
@@ -583,9 +583,9 @@ class FunkinLua {
 						}
 					} : null);
 				}
-				else luaTrace('startTween: No values on 2nd argument!', false, false, FlxColor.RED);
+				else DebugDisplay.instance.addLog('startTween: No values on 2nd argument!', false, false, FlxColor.RED);
 			}
-			else luaTrace('startTween: Couldnt find object: ' + vars, false, false, FlxColor.RED);
+			else DebugDisplay.instance.addLog('startTween: Couldnt find object: ' + vars, false, false, FlxColor.RED);
 			return null;
 		});
 
@@ -634,7 +634,7 @@ class FunkinLua {
 				}
 				else FlxTween.color(penisExam, duration, curColor, CoolUtil.colorFromString(targetColor), {ease: LuaUtils.getTweenEaseByString(ease)});
 			}
-			else luaTrace('doTweenColor: Couldnt find object: ' + vars, false, false, FlxColor.RED);
+			else DebugDisplay.instance.addLog('doTweenColor: Couldnt find object: ' + vars, false, false, FlxColor.RED);
 			return null;
 		});
 
@@ -1107,7 +1107,7 @@ class FunkinLua {
 				if(updateHitbox) poop.updateHitbox();
 				return;
 			}
-			luaTrace('setGraphicSize: Couldnt find object: ' + obj, false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog('setGraphicSize: Couldnt find object: ' + obj, false, false, FlxColor.RED);
 		});
 		Lua_helper.add_callback(lua, "scaleObject", function(obj:String, x:Float, y:Float, updateHitbox:Bool = true) {
 			if(game.getLuaObject(obj)!=null) {
@@ -1128,7 +1128,7 @@ class FunkinLua {
 				if(updateHitbox) poop.updateHitbox();
 				return;
 			}
-			luaTrace('scaleObject: Couldnt find object: ' + obj, false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog('scaleObject: Couldnt find object: ' + obj, false, false, FlxColor.RED);
 		});
 		Lua_helper.add_callback(lua, "updateHitbox", function(obj:String) {
 			if(game.getLuaObject(obj)!=null) {
@@ -1147,7 +1147,7 @@ class FunkinLua {
 				poop.updateHitbox();
 				return;
 			}
-			luaTrace('updateHitbox: Couldnt find object: ' + obj, false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog('updateHitbox: Couldnt find object: ' + obj, false, false, FlxColor.RED);
 		});
 
 		Lua_helper.add_callback(lua, "removeLuaSprite", function(tag:String, destroy:Bool = true, ?group:String = null) {
@@ -1216,7 +1216,7 @@ class FunkinLua {
 				object.cameras = [LuaUtils.cameraFromString(camera)];
 				return true;
 			}
-			luaTrace("setObjectCamera: Object " + obj + " doesn't exist!", false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog("setObjectCamera: Object " + obj + " doesn't exist!", false, false, FlxColor.RED);
 			return false;
 		});
 		Lua_helper.add_callback(lua, "setBlendMode", function(obj:String, blend:String = '') {
@@ -1236,7 +1236,7 @@ class FunkinLua {
 				spr.blend = LuaUtils.blendModeFromString(blend);
 				return true;
 			}
-			luaTrace("setBlendMode: Object " + obj + " doesn't exist!", false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog("setBlendMode: Object " + obj + " doesn't exist!", false, false, FlxColor.RED);
 			return false;
 		});
 		Lua_helper.add_callback(lua, "screenCenter", function(obj:String, pos:String = 'xy') {
@@ -1265,7 +1265,7 @@ class FunkinLua {
 						return;
 				}
 			}
-			luaTrace("screenCenter: Object " + obj + " doesn't exist!", false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog("screenCenter: Object " + obj + " doesn't exist!", false, false, FlxColor.RED);
 		});
 		Lua_helper.add_callback(lua, "objectsOverlap", function(obj1:String, obj2:String) {
 			var namesArray:Array<String> = [obj1, obj2];
@@ -1303,7 +1303,7 @@ class FunkinLua {
 			#end
 				path = Paths.getPath('data/$songPath/$dialogueFile.json', TEXT);
 
-			luaTrace('startDialogue: Trying to load dialogue: ' + path);
+			DebugDisplay.instance.addLog('startDialogue: Trying to load dialogue: ' + path);
 
 			#if MODS_ALLOWED
 			if(FileSystem.exists(path))
@@ -1315,14 +1315,14 @@ class FunkinLua {
 				if(shit.dialogue.length > 0)
 				{
 					PlayState.instance.startDialogue(shit, music);
-					luaTrace('startDialogue: Successfully loaded dialogue', false, false, FlxColor.GREEN);
+					DebugDisplay.instance.addLog('startDialogue: Successfully loaded dialogue', false, false, FlxColor.GREEN);
 					return true;
 				}
-				else luaTrace('startDialogue: Your dialogue file is badly formatted!', false, false, FlxColor.RED);
+				else DebugDisplay.instance.addLog('startDialogue: Your dialogue file is badly formatted!', false, false, FlxColor.RED);
 			}
 			else
 			{
-				luaTrace('startDialogue: Dialogue file not found', false, false, FlxColor.RED);
+				DebugDisplay.instance.addLog('startDialogue: Dialogue file not found', false, false, FlxColor.RED);
 				if(PlayState.instance.endingSong)
 					PlayState.instance.endSong();
 				else
@@ -1344,7 +1344,7 @@ class FunkinLua {
 			}
 			else
 			{
-				luaTrace('startVideo: Video file not found: ' + videoFile, false, false, FlxColor.RED);
+				DebugDisplay.instance.addLog('startVideo: Video file not found: ' + videoFile, false, false, FlxColor.RED);
 			}
 			return false;
 
@@ -1536,7 +1536,7 @@ class FunkinLua {
 			var snd:FlxSound = MusicBeatState.getVariables().get(tag);
 			return snd != null ? snd.pitch : 1;
 			#else
-			luaTrace("getSoundPitch: Sound Pitch is not supported on this platform!", false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog("getSoundPitch: Sound Pitch is not supported on this platform!", false, false, FlxColor.RED);
 			return 1;
 			#end
 		});
@@ -1575,7 +1575,7 @@ class FunkinLua {
 				}
 			}
 			#else
-			luaTrace("setSoundPitch: Sound Pitch is not supported on this platform!", false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog("setSoundPitch: Sound Pitch is not supported on this platform!", false, false, FlxColor.RED);
 			#end
 		});
 
@@ -1586,14 +1586,14 @@ class FunkinLua {
 			{
 				if(this.modFolder == null)
 				{
-					FunkinLua.luaTrace('getModSetting: Argument #2 is null and script is not inside a packed Mod folder!', false, false, FlxColor.RED);
+					DebugDisplay.instance.addLog('getModSetting: Argument #2 is null and script is not inside a packed Mod folder!', false, false, FlxColor.RED);
 					return null;
 				}
 				modName = this.modFolder;
 			}
 			return LuaUtils.getModSetting(saveTag, modName);
 			#else
-			luaTrace("getModSetting: Mods are disabled in this build!", false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog("getModSetting: Mods are disabled in this build!", false, false, FlxColor.RED);
 			#end
 		});
 		//
@@ -1646,7 +1646,7 @@ class FunkinLua {
 				}
 				return true;
 			}
-			FunkinLua.luaTrace("setAlphabetScale: Object " + tag + " doesn't exist!", false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog("setAlphabetScale: Object " + tag + " doesn't exist!", false, false, FlxColor.RED);
 			return false;
 		});
 		Lua_helper.add_callback(lua, "setAlphabetScale", function(tag:String, scale:Float) {
@@ -1656,7 +1656,7 @@ class FunkinLua {
 				obj.setScale(scale);
 				return true;
 			}
-			FunkinLua.luaTrace("setAlphabetScale: Object " + tag + " doesn't exist!", false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog("setAlphabetScale: Object " + tag + " doesn't exist!", false, false, FlxColor.RED);
 			return false;
 		});
 		Lua_helper.add_callback(lua, "setAlphabetString", function(tag:String, text:String) {
@@ -1666,7 +1666,7 @@ class FunkinLua {
 				obj.text = text;
 				return true;
 			}
-			FunkinLua.luaTrace("setAlphabetScale: Object " + tag + " doesn't exist!", false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog("setAlphabetScale: Object " + tag + " doesn't exist!", false, false, FlxColor.RED);
 			return false;
 		});
 		
@@ -1718,7 +1718,7 @@ class FunkinLua {
 			{
 				return FlxG.cameras.list.indexOf(camera);
 			}
-			luaTrace('getCameraOrder: Camera $camera doesn\'t exist!', false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog('getCameraOrder: Camera $camera doesn\'t exist!', false, false, FlxColor.RED);
 			return -1;
 		});
 
@@ -1747,7 +1747,7 @@ class FunkinLua {
 				}
 				return;
 			}
-			luaTrace('setCameraOrder: Camera $camera doesn\'t exist!', false, false, FlxColor.RED);
+			DebugDisplay.instance.addLog('setCameraOrder: Camera $camera doesn\'t exist!', false, false, FlxColor.RED);
 		});
 
 		Lua_helper.add_callback(lua, "loadWeek", function(?name:String = null, ?difficultyNum:Int = -1) {
@@ -1847,7 +1847,7 @@ class FunkinLua {
 				#if windows
 				lime.app.Application.current.window.alert(resultStr, 'Error on lua script!');
 				#else
-				luaTrace('$scriptName\n$resultStr', true, false, FlxColor.RED);
+				DebugDisplay.instance.addLog('$scriptName\n$resultStr', true, false, FlxColor.RED);
 				#end
 				lua = null;
 				return;
@@ -1878,7 +1878,7 @@ class FunkinLua {
 
 			if (type != Lua.LUA_TFUNCTION) {
 				if (type > Lua.LUA_TNIL)
-					luaTrace("ERROR (" + func + "): attempt to call a " + LuaUtils.typeToString(type) + " value", false, false, FlxColor.RED);
+					DebugDisplay.instance.addLog("ERROR (" + func + "): attempt to call a " + LuaUtils.typeToString(type) + " value", false, false, FlxColor.RED);
 
 				Lua.pop(lua, 1);
 				return LuaUtils.Function_Continue;
@@ -1890,7 +1890,7 @@ class FunkinLua {
 			// Checks if it's not successful, then show a error.
 			if (status != Lua.LUA_OK) {
 				var error:String = getErrorMessage(status);
-				luaTrace("ERROR (" + func + "): " + error, false, false, FlxColor.RED);
+				DebugDisplay.instance.addLog("ERROR (" + func + "): " + error, false, false, FlxColor.RED);
 				return LuaUtils.Function_Continue;
 			}
 
@@ -1955,7 +1955,7 @@ class FunkinLua {
 			else FlxTween.tween(target, tweenValue, duration, {ease: LuaUtils.getTweenEaseByString(ease)});
 			return tag;
 		}
-		else luaTrace('$funcName: Couldnt find object: $vars', false, false, FlxColor.RED);
+		else DebugDisplay.instance.addLog('$funcName: Couldnt find object: $vars', false, false, FlxColor.RED);
 		return null;
 	}
 
@@ -2074,7 +2074,7 @@ class FunkinLua {
 			var shaderData:Array<String> = runtimeShaders.get(name);
 			if(shaderData != null && (shaderData[0] != null || shaderData[1] != null))
 			{
-				luaTrace('Shader $name was already initialized!');
+				DebugDisplay.instance.addLog('Shader $name was already initialized!');
 				return true;
 			}
 		}
@@ -2115,9 +2115,9 @@ class FunkinLua {
 				}
 			}
 		}
-		luaTrace('Missing shader $name .frag AND .vert files!', false, false, FlxColor.RED);
+		DebugDisplay.instance.addLog('Missing shader $name .frag AND .vert files!', false, false, FlxColor.RED);
 		#else
-		luaTrace('This platform doesn\'t support Runtime Shaders!', false, false, FlxColor.RED);
+		DebugDisplay.instance.addLog('This platform doesn\'t support Runtime Shaders!', false, false, FlxColor.RED);
 		#end
 		return false;
 	}

@@ -40,7 +40,7 @@ class MusicBeatState extends FlxState
 			return cast Type.createInstance(curState, stateMap.get(name)[1]);
 		else
 		{
-			FunkinLua.luaTrace('State $name(${stateMap.get(name)[0]}) doesn\'t exists!', true, false, FlxColor.RED);
+			DebugDisplay.instance.addLog('State $name(${stateMap.get(name)[0]}) doesn\'t exists!', true, false, FlxColor.RED);
 			return null;
 		}
 	}
@@ -66,6 +66,7 @@ class MusicBeatState extends FlxState
 	var _psychCameraInitialized:Bool = false;
 
 	public var variables:Map<String, Dynamic> = new Map<String, Dynamic>();
+	public var debugVariables:Map<String, Dynamic> = new Map<String, Dynamic>();
 	public static function getVariables()
 		return getState().variables;
 
