@@ -1,12 +1,13 @@
 package debug;
 
-import openfl.events.KeyboardEvent;
 import openfl.Lib;
 import openfl.text.TextFormat;
 import openfl.text.TextField;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.Sprite;
+import openfl.events.KeyboardEvent;
+import lime.math.Rectangle;
 
 class DebugDisplay extends Sprite
 {
@@ -257,6 +258,32 @@ class DebugDisplay extends Sprite
 
 		debugTF.x = debugBG.x + 5;
 		debugTF.y = debugBG.y + 5;
+
+        // Take screenshot
+		if (Controls.instance.justPressed('screen_shot'))
+		{
+			function formatNum(num:Int):String
+			{
+				return num < 10 ? '0' + num : '' + num;
+			}
+
+			if (!FileSystem.exists("./screenshots/"))
+				FileSystem.createDirectory("./screenshots/");
+
+			var fileName:String = 'Screenshot-${formatNum(Date.now().getFullYear())}-${formatNum(Date.now().getMonth() + 1)}-${formatNum(Date.now().getDate())} ${formatNum(Date.now().getHours())}${formatNum(Date.now().getMinutes())}${formatNum(Date.now().getSeconds())}';
+			File.saveBytes('screenshots/' + fileName + '.png',
+				FlxG.stage.window.readPixels(new Rectangle(0, 0, FlxG.stage.window.width, FlxG.stage.window.height)).encode());
+
+			var flashBitmap = new Bitmap(new BitmapData(Std.int(FlxG.stage.width), Std.int(FlxG.stage.height), false, 0xFFFFFFFF));
+			var flashSpr = new Sprite();
+			flashSpr.addChild(flashBitmap);
+			FlxG.stage.addChild(flashSpr);
+			if (!ClientPrefs.data.flashing)
+				flashSpr.alpha = 0.1;
+			FlxTween.tween(flashSpr, {alpha: 0}, 0.15, {ease: FlxEase.quadOut, onComplete: _ -> FlxG.stage.removeChild(flashSpr)});
+
+			FlxG.sound.play(Paths.sound('screenshot'));
+		}
 
 		switch (curDisplay)
 		{
