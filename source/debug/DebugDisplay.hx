@@ -36,40 +36,48 @@ class DebugDisplay extends Sprite
 
 	public function addLog(value:Dynamic, ignoreCheck:Bool = false, deprecated:Bool = false, color:Int = 0xFFFFFFFF)
 	{
-		trace(value);
-
-		var logBG = new Bitmap(new BitmapData(1, 1, true, FlxColor.BLACK));
-		logBG.alpha = 0.5;
-		addChildAt(logBG, getChildIndex(frameBG));
-
-		var logTF:TextField = new TextField();
-		logTF.defaultTextFormat = new TextFormat(openfl.utils.Assets.getFont(Paths.font('HackGenConsoleNF-Regular.ttf')).fontName, 16, color);
-		logTF.text = Std.string(value);
-		logTF.autoSize = RIGHT;
-		logTF.selectable = true;
-		addChildAt(logTF, getChildIndex(frameBG));
-
-		logBG.width = logTF.width + 10;
-		logBG.height = logTF.height + 10;
-		logBG.x = Lib.current.stage.stageWidth - logBG.width - 20;
-		logBG.y = Lib.current.stage.stageHeight - logBG.height - 20;
-
-		logTF.x = logBG.x + 5;
-		logTF.y = logBG.y + 5;
-
-		for (obj in logBGArray)
+		if (ignoreCheck || FunkinLua.getBool('luaDebugMode'))
 		{
-			obj.y -= logBG.height;
-		}
+			if (deprecated && !FunkinLua.getBool('luaDeprecatedWarnings'))
+			{
+				return;
+			}
 
-		for (i in 0...logBGArray.length)
-		{
-			logTFArray[i].x = logBGArray[i].x + 5;
-			logTFArray[i].y = logBGArray[i].y + 5;
-		}
+			trace(value);
 
-		logBGArray.push(logBG);
-		logTFArray.push(logTF);
+			var logBG = new Bitmap(new BitmapData(1, 1, true, FlxColor.BLACK));
+			logBG.alpha = 0.5;
+			addChildAt(logBG, getChildIndex(frameBG));
+
+			var logTF:TextField = new TextField();
+			logTF.defaultTextFormat = new TextFormat(openfl.utils.Assets.getFont(Paths.font('HackGenConsoleNF-Regular.ttf')).fontName, 16, color);
+			logTF.text = Std.string(value);
+			logTF.autoSize = RIGHT;
+			logTF.selectable = true;
+			addChildAt(logTF, getChildIndex(frameBG));
+
+			logBG.width = logTF.width + 10;
+			logBG.height = logTF.height + 10;
+			logBG.x = Lib.current.stage.stageWidth - logBG.width - 20;
+			logBG.y = Lib.current.stage.stageHeight - logBG.height - 20;
+
+			logTF.x = logBG.x + 5;
+			logTF.y = logBG.y + 5;
+
+			for (obj in logBGArray)
+			{
+				obj.y -= logBG.height;
+			}
+
+			for (i in 0...logBGArray.length)
+			{
+				logTFArray[i].x = logBGArray[i].x + 5;
+				logTFArray[i].y = logBGArray[i].y + 5;
+			}
+
+			logBGArray.push(logBG);
+			logTFArray.push(logTF);
+		}
 	}
 
 	public function clearLog()
@@ -259,7 +267,7 @@ class DebugDisplay extends Sprite
 		debugTF.x = debugBG.x + 5;
 		debugTF.y = debugBG.y + 5;
 
-        // Take screenshot
+		// Take screenshot
 		if (Controls.instance.justPressed('screen_shot'))
 		{
 			function formatNum(num:Int):String
