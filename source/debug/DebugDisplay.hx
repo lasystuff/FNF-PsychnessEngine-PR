@@ -7,6 +7,7 @@ import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.Sprite;
 import openfl.events.KeyboardEvent;
+import states.editors.MasterEditorMenu;
 import lime.math.Rectangle;
 
 class DebugDisplay extends Sprite
@@ -181,6 +182,11 @@ class DebugDisplay extends Sprite
 
 				FlxG.save.data.displayDebugType = curDisplay;
 				FlxG.save.flush();
+			}
+
+			if (e.keyCode == ClientPrefs.keyBinds.get('debug_4')[0] || e.keyCode == ClientPrefs.keyBinds.get('debug_4')[1])
+			{
+				MasterEditorMenu.showConsole();
 			}
 		});
 

@@ -15,11 +15,13 @@ typedef SwagSong =
 	var speed:Float;
 	var offset:Float;
 
-	var player1:String;
-	var player2:String;
-	var gfVersion:String;
+	var characters:Array<SwagCharacter>;
 	var stage:String;
 	var format:String;
+
+	@:optional var player1:String;
+	@:optional var player2:String;
+	@:optional var gfVersion:String;
 
 	@:optional var gameOverChar:String;
 	@:optional var gameOverSound:String;
@@ -37,10 +39,30 @@ typedef SwagSection =
 	var sectionNotes:Array<Dynamic>;
 	var sectionBeats:Float;
 	var mustHitSection:Bool;
+	var focusCharacter:Int;
 	@:optional var altAnim:Bool;
 	@:optional var gfSection:Bool;
 	@:optional var bpm:Float;
 	@:optional var changeBPM:Bool;
+}
+
+enum abstract CharacterType(String) from String to String
+{
+	var OPPONENT = 'opponent';
+	var PLAYER = 'player';
+	var GIRLFRIEND = 'girlfriend';
+}
+
+typedef SwagCharacter =
+{
+	var name:String;
+	var position:Array<Float>;
+	var strumPosition:Array<Float>;
+	var visible:Bool;
+	var strumVisible:Bool;
+	var noteVisible:Bool;
+	var characterType:CharacterType;
+	@:optional var index:Int;
 }
 
 class Song
@@ -62,7 +84,7 @@ class Song
 	public var player1:String = 'bf';
 	public var player2:String = 'dad';
 	public var gfVersion:String = 'gf';
-	public var format:String = 'psych_v1';
+	public var format:String = 'psychness';
 
 	public static function convert(songJson:Dynamic) // Convert old charts to psych_v1 format
 	{

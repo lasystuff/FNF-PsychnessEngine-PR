@@ -255,8 +255,35 @@ class VSlice
 				speed: scrollSpeed,
 				offset: 0,
 			
-				player1: metadata.playData.characters.player,
-				player2: metadata.playData.characters.opponent,
+				characters: [
+					{
+						name: metadata.playData.characters.player,
+						position: [0, 0],
+						strumPosition: [0, 0],
+						visible: true,
+						strumVisible: true,
+						noteVisible: true,
+						characterType: 'player'
+					},
+					{
+						name: metadata.playData.characters.opponent,
+						position: [0, 0],
+						strumPosition: [0, 0],
+						visible: true,
+						strumVisible: true,
+						noteVisible: true,
+						characterType: 'opponent'
+					},
+					{
+						name: metadata.playData.characters.girlfriend,
+						position: [0, 0],
+						strumPosition: [0, 0],
+						visible: true,
+						strumVisible: false,
+						noteVisible: false,
+						characterType: 'girlfriend'
+					}
+				],
 				gfVersion: metadata.playData.characters.girlfriend,
 				stage: stage,
 				format: 'psych_v1_convert'
@@ -442,9 +469,9 @@ class VSlice
 			playData: {
 				difficulties: diffs,
 				characters: {
-					player: songData.player1,
-					girlfriend: songData.gfVersion != null ? songData.gfVersion : '', //there is no problem if gf don't exist with it 
-					opponent: songData.player2
+					player: songData.characters[0] != null ? songData.characters[0].name : 'bf',
+					girlfriend: songData.gfVersion != null ? songData.characters[2].name : '', //there is no problem if gf don't exist with it
+					opponent: songData.characters[1] != null ? songData.characters[1].name : 'dad'
 				},
 				noteStyle: !PlayState.isPixelStage ? 'funkin' : 'pixel',
 				stage: stage
@@ -463,6 +490,7 @@ class VSlice
 			sectionNotes: [],
 			sectionBeats: 4,
 			mustHitSection: true,
+			focusCharacter: 0
 		};
 	}
 

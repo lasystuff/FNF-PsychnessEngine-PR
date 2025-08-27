@@ -403,6 +403,12 @@ class TitleState extends MusicBeatState
 
 		// EASTER EGG
 
+		if (initialized && transitioning && skippedIntro && pressedEnter)
+		{
+			FlxTransitionableState.skipNextTransIn = true;
+			goToMainMenu();
+		}
+
 		if (initialized && !transitioning && skippedIntro)
 		{
 			if (newTitle && !pressedEnter)
@@ -433,11 +439,7 @@ class TitleState extends MusicBeatState
 					transitioning = true;
 					// FlxG.sound.music.stop();
 	
-					new FlxTimer().start(1, function(tmr:FlxTimer)
-					{
-						MusicBeatState.switchState(new MainMenuState());
-						closedState = true;
-					});
+					new FlxTimer().start(1, (_) -> goToMainMenu());
 					// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 				}
 			}
@@ -713,5 +715,11 @@ class TitleState extends MusicBeatState
 				skippedIntro = true;
 			}
 		}
+	}
+
+	function goToMainMenu():Void
+	{
+		MusicBeatState.switchState(new MainMenuState());
+		closedState = true;
 	}
 }

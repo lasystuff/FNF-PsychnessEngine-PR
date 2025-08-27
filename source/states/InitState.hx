@@ -6,38 +6,29 @@ class InitState extends MusicBeatState
 {
 	override function create()
 	{
-		new FlxTimer().start(1, function(timer:FlxTimer)
+		FlxG.sound.playMusic(Paths.music(MainMenuState.menuSong), 0);
+
+		ClientPrefs.loadPrefs();
+		Language.reloadPhrases();
+		MusicBeatState.resetStateMap();
+
+		if (FlxG.save.data != null && FlxG.save.data.fullscreen)
 		{
-			if (controls.pressed('debug_1'))
-			{
-				MasterEditorMenu.showConsole();
-				MasterEditorMenu.clearScreen();
-			}
+			FlxG.fullscreen = FlxG.save.data.fullscreen;
+			// trace('LOADED FULLSCREEN SETTING!!');
+		}
+		persistentUpdate = true;
+		persistentDraw = true;
 
-			FlxG.sound.playMusic(Paths.music(MainMenuState.menuSong), 0);
+		FlxTransitionableState.skipNextTransIn = true;
+		FlxTransitionableState.skipNextTransOut = true;
 
-			ClientPrefs.loadPrefs();
-			Language.reloadPhrases();
-			MusicBeatState.resetStateMap();
+		FlxG.mouse.visible = false;
 
-			if (FlxG.save.data != null && FlxG.save.data.fullscreen)
-			{
-				FlxG.fullscreen = FlxG.save.data.fullscreen;
-				// trace('LOADED FULLSCREEN SETTING!!');
-			}
-			persistentUpdate = true;
-			persistentDraw = true;
+		initScripts(Paths.getSharedPath(), 'scripts/');
+		initScripts(Paths.getSharedPath(), 'scripts/states/InitState/');
 
-			FlxTransitionableState.skipNextTransIn = true;
-			FlxTransitionableState.skipNextTransOut = true;
-
-			FlxG.mouse.visible = false;
-
-			initScripts(Paths.getSharedPath(), 'scripts/');
-			initScripts(Paths.getSharedPath(), 'scripts/states/InitState/');
-
-			MusicBeatState.switchState(MusicBeatState.getClassFromStateMap("TitleState"));
-		});
+		MusicBeatState.switchState(MusicBeatState.getClassFromStateMap("TitleState"));
 
 		Paths.clearStoredMemory();
 		super.create();

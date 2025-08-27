@@ -350,10 +350,25 @@ class FreeplayState extends MusicBeatState
 				Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
 				if (PlayState.SONG.needsVoices)
 				{
+					var boyfriendNames:Array<String> = [];
+					var dadNames:Array<String> = [];
+					var gfNames:Array<String> = [];
+					for (char in PlayState.SONG.characters)
+					{
+						switch (char.characterType)
+						{
+							case CharacterType.PLAYER:
+								boyfriendNames.push(char.name);
+							case CharacterType.OPPONENT:
+								dadNames.push(char.name);
+							case CharacterType.GIRLFRIEND:
+								gfNames.push(char.name);
+						}
+					}
 					vocals = new FlxSound();
 					try
 					{
-						var playerVocals:String = getVocalFromCharacter(PlayState.SONG.player1);
+						var playerVocals:String = getVocalFromCharacter(boyfriendNames[0] != null ? boyfriendNames[0] : PlayState.SONG.player1);
 						var loadedVocals = Paths.voices(PlayState.SONG.song, (playerVocals != null && playerVocals.length > 0) ? playerVocals : 'Player');
 						if(loadedVocals == null) loadedVocals = Paths.voices(PlayState.SONG.song);
 						
@@ -377,7 +392,7 @@ class FreeplayState extends MusicBeatState
 					try
 					{
 						//trace('please work...');
-						var oppVocals:String = getVocalFromCharacter(PlayState.SONG.player2);
+						var oppVocals:String = getVocalFromCharacter(dadNames[0] != null ? dadNames[0] : PlayState.SONG.player2);
 						var loadedVocals = Paths.voices(PlayState.SONG.song, (oppVocals != null && oppVocals.length > 0) ? oppVocals : 'Opponent');
 						
 						if(loadedVocals != null && loadedVocals.length > 0)

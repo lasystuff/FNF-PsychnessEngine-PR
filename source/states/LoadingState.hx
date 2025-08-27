@@ -554,8 +554,16 @@ class LoadingState extends MusicBeatState
 			var prefixVocals:String = song.needsVoices ? '$folder/Voices' : null;
 			if (gfVersion == null) gfVersion = 'gf';
 
+			if (song.characters != null) {
+			    for (charData in song.characters) {
+    			    if (charData != null && charData.name != null && charData.name.length > 0) {
+            			preloadCharacter(charData.name, prefixVocals);
+			        }
+			    }
+			}
+
 			dontPreloadDefaultVoices = false;
-			preloadCharacter(player1, prefixVocals);
+			// preloadCharacter(player1, prefixVocals);
 			if (!dontPreloadDefaultVoices && prefixVocals != null)
 			{
 				if(Paths.fileExists('$prefixVocals-Player.${Paths.SOUND_EXT}', SOUND, false, 'songs') && Paths.fileExists('$prefixVocals-Opponent.${Paths.SOUND_EXT}', SOUND, false, 'songs'))
@@ -567,22 +575,22 @@ class LoadingState extends MusicBeatState
 					songsToPrepare.push(prefixVocals);
 			}
 
-			if (player2 != player1)
-			{
-				threadsMax++;
-				threadPool.run(() -> {
-					try { preloadCharacter(player2, prefixVocals); } catch (e:Dynamic) {}
-					completedThread();
-				});
-			}
-			if (!stageData.hide_girlfriend && gfVersion != player2 && gfVersion != player1)
-			{
-				threadsMax++;
-				threadPool.run(() -> {
-					try { preloadCharacter(gfVersion); } catch (e:Dynamic) {}
-					completedThread();
-				});
-			}
+			// if (player2 != player1)
+			// {
+			// 	threadsMax++;
+			// 	threadPool.run(() -> {
+			// 		try { preloadCharacter(player2, prefixVocals); } catch (e:Dynamic) {}
+			// 		completedThread();
+			// 	});
+			// }
+			// if (!stageData.hide_girlfriend && gfVersion != player2 && gfVersion != player1)
+			// {
+			// 	threadsMax++;
+			// 	threadPool.run(() -> {
+			// 		try { preloadCharacter(gfVersion); } catch (e:Dynamic) {}
+			// 		completedThread();
+			// 	});
+			// }
 
 			if(threadsCompleted == threadsMax)
 			{

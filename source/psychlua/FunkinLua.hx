@@ -210,9 +210,25 @@ class FunkinLua {
 			set('defaultGirlfriendX', PlayState.instance.GF_X);
 			set('defaultGirlfriendY', PlayState.instance.GF_Y);
 
-			set('boyfriendName', PlayState.instance.boyfriend != null ? PlayState.instance.boyfriend.curCharacter : PlayState.SONG.player1);
-			set('dadName', PlayState.instance.dad != null ? PlayState.instance.dad.curCharacter : PlayState.SONG.player2);
-			set('gfName', PlayState.instance.gf != null ? PlayState.instance.gf.curCharacter : PlayState.SONG.gfVersion);
+			var boyfriendNames:Array<String> = [];
+			var dadNames:Array<String> = [];
+			var gfNames:Array<String> = [];
+			for (char in PlayState.SONG.characters)
+			{
+				switch (char.characterType)
+				{
+					case CharacterType.PLAYER:
+						boyfriendNames.push(char.name);
+					case CharacterType.OPPONENT:
+						dadNames.push(char.name);
+					case CharacterType.GIRLFRIEND:
+						gfNames.push(char.name);
+				}
+			}
+			set('characters', PlayState.SONG.characters);
+			set('boyfriendName', PlayState.instance.boyfriend != null ? PlayState.instance.boyfriend.curCharacter : boyfriendNames);
+			set('dadName', PlayState.instance.dad != null ? PlayState.instance.dad.curCharacter : dadNames);
+			set('gfName', PlayState.instance.gf != null ? PlayState.instance.gf.curCharacter : gfNames);
 		}
 
 		// Other settings
@@ -244,7 +260,8 @@ class FunkinLua {
 		set('buildTarget', LuaUtils.getBuildTarget());
 
 		// For MainMenuState
-		set('downscroll', ClientPrefs.data.downScroll);
+		set('psychnessEngineVersion', MainMenuState.psychnessEngineVersion);
+		set('psychEngineVersion', MainMenuState.psychEngineVersion);
 
 		//
 		Lua_helper.add_callback(lua, "getRunningScripts", function() {
@@ -687,11 +704,11 @@ class FunkinLua {
 			}
 			return released;
 		});
-		Lua_helper.add_callback(lua, "mouseOverlaps", function(object:String) {
+		Lua_helper.add_callback(lua, "mouseOverlaps", function(object:String, camera:String) {
 			if (object == null || object.length < 1)
 				return false;
 
-			return FlxG.mouse.overlaps(game.getLuaObject(object));
+			return FlxG.mouse.overlaps(game.getLuaObject(object), LuaUtils.cameraFromString(camera));
 		});
 
 		Lua_helper.add_callback(lua, "cancelTween", function(tag:String) LuaUtils.cancelTween(tag));
@@ -756,12 +773,7 @@ class FunkinLua {
 
 		// precaching
 		Lua_helper.add_callback(lua, "addCharacterToList", function(name:String, type:String) {
-			var charType:Int = 0;
-			switch(type.toLowerCase()) {
-				case 'dad': charType = 1;
-				case 'gf' | 'girlfriend': charType = 2;
-			}
-			PlayState.instance.addCharacterToList(name, charType);
+			PlayState.instance.addCharacterToList(name, CoolUtil.getCharacterDataFromString(type).charType, CoolUtil.getCharacterDataFromString(type).character);
 		});
 		Lua_helper.add_callback(lua, "precacheImage", function(name:String, ?allowGPU:Bool = true) {
 			Paths.image(name, allowGPU);
@@ -861,16 +873,8 @@ class FunkinLua {
 					PlayState.instance.boyfriendGroup.y = value;
 			}
 		});
-		Lua_helper.add_callback(lua, "cameraSetTarget", function(target:String) {
-			switch(target.trim().toLowerCase())
-			{
-				case 'gf', 'girlfriend':
-					PlayState.instance.moveCameraToGirlfriend();
-				case 'dad', 'opponent':
-					PlayState.instance.moveCamera(true);
-				default:
-					PlayState.instance.moveCamera(false);
-			}
+		Lua_helper.add_callback(lua, "cameraSetTarget", function(index:Int) {
+			PlayState.instance.moveCamera(index);
 		});
 
 		Lua_helper.add_callback(lua, "setCameraScroll", function(x:Float, y:Float) FlxG.camera.scroll.set(x - FlxG.width/2, y - FlxG.height/2));
@@ -1963,7 +1967,8 @@ class FunkinLua {
 	{
 		if(PlayState.instance == null) return null;
 
-		var strumNote:StrumNote = PlayState.instance.strumLineNotes.members[note % PlayState.instance.strumLineNotes.length];
+		var strumNote:StrumNote = PlayState.instance.strumLineNotes.members[note];
+		trace(strumNote, note);
 		if(strumNote == null) return null;
 
 		if(tag != null)

@@ -6,6 +6,7 @@ import backend.Rating;
 import objects.Note;
 import objects.NoteSplash;
 import objects.StrumNote;
+import objects.Character;
 
 import flixel.util.FlxSort;
 import flixel.util.FlxStringUtil;
@@ -25,7 +26,7 @@ class EditorPlayState extends MusicBeatSubstate
 	var inst:FlxSound = new FlxSound();
 	var vocals:FlxSound;
 	var opponentVocals:FlxSound;
-	
+
 	var notes:FlxTypedGroup<Note>;
 	var unspawnNotes:Array<Note> = [];
 	var ratingsData:Array<Rating> = Rating.loadDefault();
@@ -100,7 +101,7 @@ class EditorPlayState extends MusicBeatSubstate
 		bg.color = 0xFF101010;
 		bg.alpha = 0.9;
 		add(bg);
-		
+
 		/**** NOTES ****/
 		comboGroup = new FlxSpriteGroup();
 		add(comboGroup);
@@ -116,8 +117,15 @@ class EditorPlayState extends MusicBeatSubstate
 		opponentStrums = new FlxTypedGroup<StrumNote>();
 		playerStrums = new FlxTypedGroup<StrumNote>();
 		
-		generateStaticArrows(0);
-		generateStaticArrows(1);
+		for (char in PlayState.SONG.characters)
+		{
+			if (char.characterType == OPPONENT)
+				generateStaticArrows(char, 0);
+			if (char.characterType == PLAYER)
+				generateStaticArrows(char, 1);
+			if (char.characterType == GIRLFRIEND)
+				generateStaticArrows(char, 0);
+		}
 		/***************/
 		
 		scoreTxt = new FlxText(10, FlxG.height - 50, FlxG.width - 20, "", 20);
@@ -211,10 +219,12 @@ class EditorPlayState extends MusicBeatSubstate
 				var strumGroup:FlxTypedGroup<StrumNote> = playerStrums;
 				if(!daNote.mustPress) strumGroup = opponentStrums;
 
-				var strum:StrumNote = strumGroup.members[daNote.noteData];
+				strumGroup = strumLineNotes;
+				var strum:StrumNote = strumGroup.members[daNote.noteColumn];
 				daNote.followStrumNote(strum, fakeCrochet, songSpeed / playbackRate);
+				daNote.visible = PlayState.SONG.characters[Std.int(daNote.noteColumn / 4)].noteVisible;
 
-				if(!daNote.mustPress && daNote.wasGoodHit && !daNote.hitByOpponent && !daNote.ignoreNote)
+				if (daNote.wasGoodHit && !daNote.hitByOpponent && !daNote.ignoreNote)
 					opponentNoteHit(daNote);
 
 				if(daNote.isSustainNote && strum.sustainReduce) daNote.clipToStrumNote(strum);
@@ -373,7 +383,7 @@ class EditorPlayState extends MusicBeatSubstate
 			swagNote.sustainLength = note.sustainLength;
 			swagNote.gfNote = note.gfNote;
 			swagNote.noteType = note.noteType;
-
+			swagNote.noteColumn = note.noteColumn;
 			swagNote.scrollFactor.set();
 			unspawnNotes.push(swagNote);
 
@@ -389,6 +399,7 @@ class EditorPlayState extends MusicBeatSubstate
 					sustainNote.mustPress = swagNote.mustPress;
 					sustainNote.gfNote = swagNote.gfNote;
 					sustainNote.noteType = swagNote.noteType;
+					sustainNote.noteColumn = swagNote.noteColumn;
 					sustainNote.scrollFactor.set();
 					sustainNote.parent = swagNote;
 					unspawnNotes.push(sustainNote);
@@ -440,7 +451,7 @@ class EditorPlayState extends MusicBeatSubstate
 		unspawnNotes.sort(PlayState.sortByTime);
 	}
 	
-	private function generateStaticArrows(player:Int):Void
+	private function generateStaticArrows(characterData:SwagCharacter, player:Int):Void
 	{
 		var strumLineX:Float = ClientPrefs.data.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X;
 		var strumLineY:Float = ClientPrefs.data.downScroll ? (FlxG.height - 150) : 50;
@@ -456,6 +467,7 @@ class EditorPlayState extends MusicBeatSubstate
 
 			var babyArrow:StrumNote = new StrumNote(strumLineX, strumLineY, i, player);
 			babyArrow.downScroll = ClientPrefs.data.downScroll;
+			babyArrow.visible = characterData.strumVisible;
 			babyArrow.alpha = targetAlpha;
 
 			if (player == 1)
@@ -474,6 +486,9 @@ class EditorPlayState extends MusicBeatSubstate
 
 			strumLineNotes.add(babyArrow);
 			babyArrow.playerPosition();
+
+			babyArrow.x += characterData.strumPosition[0];
+			babyArrow.y += characterData.strumPosition[1];
 		}
 	}
 
@@ -791,7 +806,7 @@ class EditorPlayState extends MusicBeatSubstate
 		if (PlayState.SONG.needsVoices && opponentVocals.length <= 0)
 			vocals.volume = 1;
 
-		var strum:StrumNote = opponentStrums.members[Std.int(Math.abs(note.noteData))];
+		var strum:StrumNote = strumLineNotes.members[Std.int(Math.abs(note.noteColumn))];
 		if(strum != null) {
 			strum.playAnim('confirm', true);
 			strum.resetAnim = Conductor.stepCrochet * 1.25 / 1000 / playbackRate;

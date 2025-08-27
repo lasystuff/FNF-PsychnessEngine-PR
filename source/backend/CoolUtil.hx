@@ -1,5 +1,9 @@
 package backend;
 
+import backend.Song.SwagSong;
+import objects.HealthIcon;
+import objects.Character;
+
 import openfl.utils.Assets;
 import lime.utils.Assets as LimeAssets;
 
@@ -184,5 +188,86 @@ class CoolUtil
 			default:
 				text.borderStyle = NONE;
 		}
+	}
+
+	public static function getCharacterDataFromString(name:String):Dynamic
+	{
+		var song:SwagSong = PlayState.SONG;
+		var game:PlayState = PlayState.instance;
+
+		var character:Character = game.boyfriend;
+		var charType:Int = 0;
+		var map:Map<String, Character> = game.boyfriendMap;
+		var array:Array<Character> = game.players;
+		var icon:HealthIcon = game.iconP1;
+		var scriptShit:String = 'boyfriendName';
+
+		var formatedCharNames:Array<String> = [];
+		for (i in 0...game.characters.length) {
+			formatedCharNames.push(game.characters[i].curCharacter + "#" + game.characters[i].charIndex);
+		}
+
+		if (!formatedCharNames.contains(name))
+		{
+			switch(name.toLowerCase().trim()) {
+				case 'bf' | 'boyfriend' | 'player' | '0':
+					character = game.boyfriend;
+					map = game.boyfriendMap;
+					array = game.players;
+					charType = 0;
+					icon = game.iconP1;
+					scriptShit = 'boyfriendName';
+				case 'dad' | 'opponent' | '1':
+					character = game.dad;
+					map = game.dadMap;
+					array = game.opponents;
+					charType = 1;
+					icon = game.iconP2;
+					scriptShit = 'dadName';
+				case 'gf' | 'girlfriend' | '2':
+					character = game.gf;
+					map = game.gfMap;
+					array = game.girlfriends;
+					charType = 2;
+					icon = null;
+					scriptShit = 'gfName';
+			}
+		}
+		else
+		{
+			if (song.characters[formatedCharNames.indexOf(name)].characterType == 'player') {
+				character = game.characters[formatedCharNames.indexOf(name)];
+				map = game.boyfriendMap;
+				array = game.players;
+				charType = 0;
+				icon = game.iconP1;
+				scriptShit = 'boyfriendName';
+			}
+			if (song.characters[formatedCharNames.indexOf(name)].characterType == 'opponent') {
+				character = game.characters[formatedCharNames.indexOf(name)];
+				map = game.dadMap;
+				array = game.opponents;
+				charType = 1;
+				icon = game.iconP2;
+				scriptShit = 'dadName';
+			}
+			if (song.characters[formatedCharNames.indexOf(name)].characterType == 'girlfriend') {
+				character = game.characters[formatedCharNames.indexOf(name)];
+				map = game.gfMap;
+				array = game.girlfriends;
+				charType = 2;
+				icon = null;
+				scriptShit = 'gfName';
+			}
+		}
+
+		return {
+			character: character,
+			charType: charType,
+			map: map,
+			array: array,
+			icon: icon,
+			scriptShit: scriptShit
+		};
 	}
 }
