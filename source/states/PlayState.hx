@@ -438,6 +438,10 @@ class PlayState extends MusicBeatState
 			var array:Array<Character>;
 			switch (char.characterType)
 			{
+				default:
+					group = dadGroup;
+					map = dadMap;
+					array = opponents;
 				case PLAYER:
 					group = boyfriendGroup;
 					map = boyfriendMap;
@@ -446,10 +450,6 @@ class PlayState extends MusicBeatState
 					group = gfGroup;
 					map = gfMap;
 					array = girlfriends;
-				default:
-					group = dadGroup;
-					map = dadMap;
-					array = opponents;
 			}
 			group.add(character);
 			map.set(character.curCharacter, character);
