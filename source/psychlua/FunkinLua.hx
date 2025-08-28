@@ -177,6 +177,7 @@ class FunkinLua {
 			set('totalNotesHit', PlayState.instance.totalNotesHit);
 
 			set('inGameOver', GameOverSubstate.instance != null);
+			set('focusCharacter', curSection != null ? curSection.focusCharacter : 0);
 			set('mustHitSection', curSection != null ? (curSection.mustHitSection == true) : false);
 			set('altAnim', curSection != null ? (curSection.altAnim == true) : false);
 			set('gfSection', curSection != null ? (curSection.gfSection == true) : false);
