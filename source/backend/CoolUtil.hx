@@ -206,6 +206,7 @@ class CoolUtil
 		for (i in 0...game.characters.length) {
 			formatedCharNames.push(game.characters[i].curCharacter + "#" + game.characters[i].charIndex);
 		}
+		trace(formatedCharNames);
 
 		if (!formatedCharNames.contains(name))
 		{

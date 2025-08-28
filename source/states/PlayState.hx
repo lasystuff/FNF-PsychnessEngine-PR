@@ -763,6 +763,7 @@ class PlayState extends MusicBeatState
 					if (oldCharacter != null) newGf.charIndex = oldCharacter.charIndex;
 					newGf.scrollFactor.set(0.95, 0.95);
 					gfMap.set(newCharacter, newGf);
+					trace(gfMap.get(newCharacter));
 					gfGroup.add(newGf);
 					startCharacterPos(newGf);
 					newGf.alpha = 0.00001;
@@ -2229,6 +2230,7 @@ class PlayState extends MusicBeatState
 
 
 			case 'Change Character':
+				// 吐き気がするコード
 				var data = CoolUtil.getCharacterDataFromString(value1);
 				var character:Character = data.character;
 				var charType:Int = data.charType;
@@ -2237,19 +2239,31 @@ class PlayState extends MusicBeatState
 				var icon:HealthIcon = data.icon;
 				var scriptShit:String = data.scriptShit;
 
+				function updateData() {
+					data = CoolUtil.getCharacterDataFromString(value1);
+					character = data.character;
+					charType = data.charType;
+					map = data.map;
+					array = data.array;
+					icon = data.icon;
+					scriptShit = data.scriptShit;
+				}
+
 				if(!map.exists(value2)) {
 					addCharacterToList(value2, charType, character);
 				}
 
-				var oldCharacter:Character = character;
 				var wasGf:Bool = character.curCharacter.startsWith('gf-') || character.curCharacter == 'gf';
 				var lastAlpha:Float = character.alpha;
 				character.alpha = 0.00001;
-				character = map.get(value2);
+				characters[characters.indexOf(character)] = map.get(value2);
+				array[array.indexOf(character)] = map.get(value2);
 				map.get(value2).charIndex = character.charIndex;
-				var shouldChangeIcon:Bool = array.indexOf(oldCharacter) == 0;
-				characters[characters.indexOf(oldCharacter)] = character;
-				array[array.indexOf(oldCharacter)] = character;
+				updateData();
+				gf = map.get(value2);
+				updateData();
+				gf.alpha = lastAlpha;
+				var shouldChangeIcon:Bool = array.indexOf(character) == 0;
 				if (charType == 1) {
 					if(!character.curCharacter.startsWith('gf-') && character.curCharacter != 'gf') {
 						if(wasGf && gf != null) {
@@ -2259,77 +2273,11 @@ class PlayState extends MusicBeatState
 						gf.visible = false;
 					}
 				}
-				character.alpha = lastAlpha;
 
 				if (icon != null && shouldChangeIcon)
 					icon.changeIcon(character.healthIcon);
 
 				setOnScripts(scriptShit, character.curCharacter);
-
-				// switch(value1.toLowerCase().trim()) {
-				// 	case 'gf' | 'girlfriend':
-				// 		charType = 2;
-				// 	case 'dad' | 'opponent':
-				// 		charType = 1;
-				// 	default:
-				// 		charType = Std.parseInt(value1);
-				// 		if(Math.isNaN(charType)) charType = 0;
-				// }
-
-				// switch(charType) {
-				// 	case 0:
-				// 		if(boyfriend.curCharacter != value2) {
-				// 			if(!boyfriendMap.exists(value2)) {
-				// 				addCharacterToList(value2, charType);
-				// 			}
-
-				// 			var lastAlpha:Float = boyfriend.alpha;
-				// 			boyfriend.alpha = 0.00001;
-				// 			boyfriend = boyfriendMap.get(value2);
-				// 			boyfriend.alpha = lastAlpha;
-				// 			iconP1.changeIcon(boyfriend.healthIcon);
-				// 		}
-				// 		setOnScripts('boyfriendName', boyfriend.curCharacter);
-
-				// 	case 1:
-				// 		if(dad.curCharacter != value2) {
-				// 			if(!dadMap.exists(value2)) {
-				// 				addCharacterToList(value2, charType);
-				// 			}
-
-				// 			var wasGf:Bool = dad.curCharacter.startsWith('gf-') || dad.curCharacter == 'gf';
-				// 			var lastAlpha:Float = dad.alpha;
-				// 			dad.alpha = 0.00001;
-				// 			dad = dadMap.get(value2);
-				// 			if(!dad.curCharacter.startsWith('gf-') && dad.curCharacter != 'gf') {
-				// 				if(wasGf && gf != null) {
-				// 					gf.visible = true;
-				// 				}
-				// 			} else if(gf != null) {
-				// 				gf.visible = false;
-				// 			}
-				// 			dad.alpha = lastAlpha;
-				// 			iconP2.changeIcon(dad.healthIcon);
-				// 		}
-				// 		setOnScripts('dadName', dad.curCharacter);
-
-				// 	case 2:
-				// 		if(gf != null)
-				// 		{
-				// 			if(gf.curCharacter != value2)
-				// 			{
-				// 				if(!gfMap.exists(value2)) {
-				// 					addCharacterToList(value2, charType);
-				// 				}
-
-				// 				var lastAlpha:Float = gf.alpha;
-				// 				gf.alpha = 0.00001;
-				// 				gf = gfMap.get(value2);
-				// 				gf.alpha = lastAlpha;
-				// 			}
-				// 			setOnScripts('gfName', gf.curCharacter);
-				// 		}
-				// }
 				reloadHealthBarColors();
 
 			case 'Change Scroll Speed':
@@ -3359,6 +3307,7 @@ class PlayState extends MusicBeatState
 				setOnScripts('crochet', Conductor.crochet);
 				setOnScripts('stepCrochet', Conductor.stepCrochet);
 			}
+			setOnScripts('focusCharacter', SONG.notes[curSection].focusCharacter);
 			setOnScripts('mustHitSection', SONG.notes[curSection].mustHitSection);
 			setOnScripts('altAnim', SONG.notes[curSection].altAnim);
 			setOnScripts('gfSection', SONG.notes[curSection].gfSection);
